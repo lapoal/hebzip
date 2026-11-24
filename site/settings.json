@@ -1,0 +1,6 @@
+{
+ "_what": "The website's settings, read by the page at start. repo = the GitHub repository (owner/name) used by the 'Share your result' button and the links to the README; change it here only.",
+ "repo": "lapoal/hebzip",
+ "max_input_bytes": 16000,
+ "default_seconds_per_kb": 0.7
+}

@@ -1,0 +1,5 @@
+# Every file is stored and checked out byte for byte, on every system.
+# Why: the golden texts, the bench texts and the packages are pinned by sha256 (golden/manifest.json,
+# tools/compare_page/bench/manifest.json), and some texts use CRLF on purpose. Git for Windows converts
+# line endings by default (core.autocrlf=true), which would change those bytes in a fresh clone.
+* -text

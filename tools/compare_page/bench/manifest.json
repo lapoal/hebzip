@@ -1,0 +1,664 @@
+{
+ "what": "hebzip public measurement: the text sets. Every text is either shipped in this repository (file, sha256) or rebuilt from a public dataset (dataset + row) and checked against its sha256 before it is measured.",
+ "datasets": {
+  "omilab": {
+   "name": "OMILab Neural-Sentiment-Analyzer-for-Modern-Hebrew, data/token_train.tsv + data/token_test.tsv",
+   "url": "https://github.com/omilab/Neural-Sentiment-Analyzer-for-Modern-Hebrew/tree/master/data",
+   "licence": "MIT (c) 2018 OMIlab, Open University of Israel",
+   "files": [
+    "token_train.tsv",
+    "token_test.tsv"
+   ],
+   "note": "downloaded 18/11/2026 from the master branch; the commit was not recorded - the sha256 of every rebuilt text is the check"
+  }
+ },
+ "sets": [
+  {
+   "id": "he_wiki",
+   "language": "he",
+   "length": "short",
+   "kind": "encyclopedic",
+   "about": "Opening paragraphs of 5 Hebrew Wikipedia articles (the golden wiki_* texts), retrieved 18/11/2026 through the MediaWiki API (prop=extracts); headings removed. Licence CC BY-SA 4.0, (c) Hebrew Wikipedia contributors.",
+   "texts": [
+    {
+     "name": "wiki_bicycle",
+     "file": "golden/texts/wiki_bicycle.txt",
+     "bytes": 1551,
+     "sha256": "1da54487cfa68cb5de67fff1528241ed2cdd25d7db7e4ccdfd660fafec900e58",
+     "source": {
+      "title": "אופניים",
+      "url": "https://he.wikipedia.org/wiki/%D7%90%D7%95%D7%A4%D7%A0%D7%99%D7%99%D7%9D",
+      "retrieved": "2026-11-18",
+      "revision": null
+     }
+    },
+    {
+     "name": "wiki_cat",
+     "file": "golden/texts/wiki_cat.txt",
+     "bytes": 2036,
+     "sha256": "8fdca435c6669a60f6cb6e82e4d17cf59da2e43a08b6a210d7d9ed7958dd3e1f",
+     "source": {
+      "title": "חתול",
+      "url": "https://he.wikipedia.org/wiki/%D7%97%D7%AA%D7%95%D7%9C",
+      "retrieved": "2026-11-18",
+      "revision": null
+     }
+    },
+    {
+     "name": "wiki_chocolate",
+     "file": "golden/texts/wiki_chocolate.txt",
+     "bytes": 2609,
+     "sha256": "f2abb27ba6fb9b0eb77f57494f440e9213d5dfab7cea9e8bf11dfe4bc338ba43",
+     "source": {
+      "title": "שוקולד",
+      "url": "https://he.wikipedia.org/wiki/%D7%A9%D7%95%D7%A7%D7%95%D7%9C%D7%93",
+      "retrieved": "2026-11-18",
+      "revision": null
+     }
+    },
+    {
+     "name": "wiki_computer",
+     "file": "golden/texts/wiki_computer.txt",
+     "bytes": 1518,
+     "sha256": "98edeb689c2205b17ed4196acaf951ce3846f6d8116d2d802c7ba28a7830d0ee",
+     "source": {
+      "title": "מחשב",
+      "url": "https://he.wikipedia.org/wiki/%D7%9E%D7%97%D7%A9%D7%91",
+      "retrieved": "2026-11-18",
+      "revision": null
+     }
+    },
+    {
+     "name": "wiki_rain",
+     "file": "golden/texts/wiki_rain.txt",
+     "bytes": 2716,
+     "sha256": "1ef3d475b64c767c6a4bcc6117cb7d88b23f8b0b177e17152ea9e5652ee74b10",
+     "source": {
+      "title": "גשם",
+      "url": "https://he.wikipedia.org/wiki/%D7%92%D7%A9%D7%9D",
+      "retrieved": "2026-11-18",
+      "revision": null
+     }
+    }
+   ]
+  },
+  {
+   "id": "he_fresh",
+   "language": "he",
+   "length": "short",
+   "kind": "encyclopedic",
+   "about": "Lead prose (120-200 words) of 5 Hebrew Wikipedia articles CREATED in November 2026 (after the corpus the tables were built from), retrieved 19/11/2026 through the MediaWiki API (prop=extracts, plain text); headings and lines under 8 words dropped, parenthesised asides removed, cut at a sentence end. Licence CC BY-SA 4.0, (c) Hebrew Wikipedia contributors.",
+   "texts": [
+    {
+     "name": "he_725029",
+     "file": "tools/compare_page/bench/texts/he_fresh/he_725029.txt",
+     "bytes": 2044,
+     "sha256": "a90d3f9ba4c9a4a938e1211aa61377c74d446cd3df9ed1a340fd45ad37659e2f",
+     "source": {
+      "title": "שירה ופיוט של יהודי בבל",
+      "url": "https://he.wikipedia.org/wiki/%D7%A9%D7%99%D7%A8%D7%94_%D7%95%D7%A4%D7%99%D7%95%D7%98_%D7%A9%D7%9C_%D7%99%D7%94%D7%95%D7%93%D7%99_%D7%91%D7%91%D7%9C",
+      "created": "2026-11-10T11:28:58Z",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "he_742675",
+     "file": "tools/compare_page/bench/texts/he_fresh/he_742675.txt",
+     "bytes": 1443,
+     "sha256": "d60f705d9a164e2df01ea8cb0d07e5c28d35522377d019197c4fd07ff7239db1",
+     "source": {
+      "title": "מלונאות בהרצליה",
+      "url": "https://he.wikipedia.org/wiki/%D7%9E%D7%9C%D7%95%D7%A0%D7%90%D7%95%D7%AA_%D7%91%D7%94%D7%A8%D7%A6%D7%9C%D7%99%D7%94",
+      "created": "2026-11-16T20:47:55Z",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "he_87872",
+     "file": "tools/compare_page/bench/texts/he_fresh/he_87872.txt",
+     "bytes": 2076,
+     "sha256": "38f0f697d31931b3ad09d5e970020256633a7ad85f27275b8f1c7fc4d9dc4c95",
+     "source": {
+      "title": "התוכנית לפרשנות ותרבות באוניברסיטת בר-אילן",
+      "url": "https://he.wikipedia.org/wiki/%D7%94%D7%AA%D7%95%D7%9B%D7%A0%D7%99%D7%AA_%D7%9C%D7%A4%D7%A8%D7%A9%D7%A0%D7%95%D7%AA_%D7%95%D7%AA%D7%A8%D7%91%D7%95%D7%AA_%D7%91%D7%90%D7%95%D7%A0%D7%99%D7%91%D7%A8%D7%A1%D7%99%D7%98%D7%AA_%D7%91%D7%A8-%D7%90%D7%99%D7%9C%D7%9F",
+      "created": "2026-11-02T18:56:07Z",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "he_929390",
+     "file": "tools/compare_page/bench/texts/he_fresh/he_929390.txt",
+     "bytes": 1147,
+     "sha256": "f0ec656fb1f4523717122deb5ddf35ed67c061919cc3ef200114edc2c8e020a6",
+     "source": {
+      "title": "יהודה לייב הלוי אשלג (השני)",
+      "url": "https://he.wikipedia.org/wiki/%D7%99%D7%94%D7%95%D7%93%D7%94_%D7%9C%D7%99%D7%99%D7%91_%D7%94%D7%9C%D7%95%D7%99_%D7%90%D7%A9%D7%9C%D7%92_%28%D7%94%D7%A9%D7%A0%D7%99%29",
+      "created": "2026-11-15T08:07:24Z",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "he_932946",
+     "file": "tools/compare_page/bench/texts/he_fresh/he_932946.txt",
+     "bytes": 2055,
+     "sha256": "737076095862ed5d2fc2c1c3790f09b5b3ecb24a172d948296c28d5e73bbdbb5",
+     "source": {
+      "title": "קהילת יהודי קלבריה",
+      "url": "https://he.wikipedia.org/wiki/%D7%A7%D7%94%D7%99%D7%9C%D7%AA_%D7%99%D7%94%D7%95%D7%93%D7%99_%D7%A7%D7%9C%D7%91%D7%A8%D7%99%D7%94",
+      "created": "2026-11-11T11:46:21Z",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    }
+   ]
+  },
+  {
+   "id": "he_own",
+   "language": "he",
+   "length": "mixed",
+   "kind": "project",
+   "about": "8 Hebrew texts written for this project in November 2026 by an AI model (letters, notices, a story, a diary, an essay, journals); every person and place invented. Released with the project (see golden/TEXTS-ABOUT.txt).",
+   "texts": [
+    {
+     "name": "own_diary",
+     "file": "golden/texts/own_diary.txt",
+     "bytes": 2594,
+     "sha256": "dbb181e627afbc2491fafaf1732c0cfc6e61d2a58bd72156c2bc969807fc95cd",
+     "source": {
+      "written_by": "an AI model, for this project",
+      "date": "2026-11"
+     }
+    },
+    {
+     "name": "own_journal",
+     "file": "golden/texts/own_journal.txt",
+     "bytes": 21904,
+     "sha256": "3b3a986114bb4e135be55d0970ba56b5691114875cd7d65c8e118c5a8827cd89",
+     "source": {
+      "written_by": "an AI model, for this project",
+      "date": "2026-11"
+     }
+    },
+    {
+     "name": "own_letter",
+     "file": "golden/texts/own_letter.txt",
+     "bytes": 1459,
+     "sha256": "031a305ac3d61b38f1754f7a1253e019b9d4d819af6a7e6bda2e7aa4291cf2b7",
+     "source": {
+      "written_by": "an AI model, for this project",
+      "date": "2026-11"
+     }
+    },
+    {
+     "name": "own_message",
+     "file": "golden/texts/own_message.txt",
+     "bytes": 940,
+     "sha256": "e74ccc621eb1eb54ee784e7514b5ee35ed0ea06ab9337c04ae6c76c9634a08e0",
+     "source": {
+      "written_by": "an AI model, for this project",
+      "date": "2026-11"
+     }
+    },
+    {
+     "name": "own_moving",
+     "file": "golden/texts/own_moving.txt",
+     "bytes": 8629,
+     "sha256": "2ff5939669804163b254ef7e4d97f528c2ecee1ac61cc1e15b47d4613048db0e",
+     "source": {
+      "written_by": "an AI model, for this project",
+      "date": "2026-11"
+     }
+    },
+    {
+     "name": "own_notice",
+     "file": "golden/texts/own_notice.txt",
+     "bytes": 995,
+     "sha256": "906a32cbbf8838cdb91abb151e9c196453555600267bc5e6591369201a0ccfdd",
+     "source": {
+      "written_by": "an AI model, for this project",
+      "date": "2026-11"
+     }
+    },
+    {
+     "name": "own_page",
+     "file": "golden/texts/own_page.txt",
+     "bytes": 3506,
+     "sha256": "e0239a7a6405355253e90210fc4c33c43a044b8cea341575eaea80aa07b8d4a8",
+     "source": {
+      "written_by": "an AI model, for this project",
+      "date": "2026-11"
+     }
+    },
+    {
+     "name": "own_story",
+     "file": "golden/texts/own_story.txt",
+     "bytes": 1819,
+     "sha256": "ad52215ad9cadf6738cb667f26c9fdaa754a702a9a52b8fa7db8bab6d5add7b6",
+     "source": {
+      "written_by": "an AI model, for this project",
+      "date": "2026-11"
+     }
+    }
+   ]
+  },
+  {
+   "id": "he_everyday_omilab",
+   "language": "he",
+   "length": "short",
+   "kind": "everyday",
+   "about": "10 real public Facebook comments (60-150 words) from the OMILab Hebrew sentiment benchmark (MIT licence). The text is NOT shipped: give the dataset folder with --omilab; each text = one line of the file (0-based line number), the label column cut off, the tokenisation spaces undone (atar/bench/datasets.py).",
+   "texts": [
+    {
+     "name": "fb_01",
+     "dataset": "omilab",
+     "from": {
+      "file": "token_train.tsv",
+      "line": 10179
+     },
+     "bytes": 603,
+     "sha256": "787eabe626fc488079041ee8482ad0ae36e7f0abec095986108067c1fc915198"
+    },
+    {
+     "name": "fb_05",
+     "dataset": "omilab",
+     "from": {
+      "file": "token_train.tsv",
+      "line": 8166
+     },
+     "bytes": 623,
+     "sha256": "6b4e4c5809bd22501b75310ea12d85038fff4bfc3316f577742d7817cb72c220"
+    },
+    {
+     "name": "fb_06",
+     "dataset": "omilab",
+     "from": {
+      "file": "token_train.tsv",
+      "line": 2810
+     },
+     "bytes": 612,
+     "sha256": "3ed42e6e8460f2ac6456ba166e52a8d0294037327b7c9f75fab9828bfbec4bc2"
+    },
+    {
+     "name": "fb_07",
+     "dataset": "omilab",
+     "from": {
+      "file": "token_train.tsv",
+      "line": 426
+     },
+     "bytes": 636,
+     "sha256": "924d3f854a2901307da07206fcba66f3fd617b93f0062a9849b4847cfecd1a3a"
+    },
+    {
+     "name": "fb_09",
+     "dataset": "omilab",
+     "from": {
+      "file": "token_train.tsv",
+      "line": 7361
+     },
+     "bytes": 697,
+     "sha256": "f136463470b1a38e60bac0bb8ec22baa113874c8fd3457de401d65936cb1a91f"
+    },
+    {
+     "name": "fb_10",
+     "dataset": "omilab",
+     "from": {
+      "file": "token_train.tsv",
+      "line": 9837
+     },
+     "bytes": 664,
+     "sha256": "bfa078b69dd0d965133b543f35e3db1ad6ee7ef2f2229fbec221c69a33895e8a"
+    },
+    {
+     "name": "fb_11",
+     "dataset": "omilab",
+     "from": {
+      "file": "token_train.tsv",
+      "line": 5707
+     },
+     "bytes": 850,
+     "sha256": "bb065c00834136dd300ece0611817f2ea5504b0b7feb946d36633e3dd6380281"
+    },
+    {
+     "name": "fb_14",
+     "dataset": "omilab",
+     "from": {
+      "file": "token_train.tsv",
+      "line": 3567
+     },
+     "bytes": 525,
+     "sha256": "5126e032380d7db4db704b400395c2703682c2e7b4c90674254330f1ad26b44c"
+    },
+    {
+     "name": "fb_15",
+     "dataset": "omilab",
+     "from": {
+      "file": "token_train.tsv",
+      "line": 8165
+     },
+     "bytes": 573,
+     "sha256": "98294020fd5c1f0bc466073e17194f1c385f193fedbc07262462aef22561f200"
+    },
+    {
+     "name": "fb_16",
+     "dataset": "omilab",
+     "from": {
+      "file": "token_train.tsv",
+      "line": 886
+     },
+     "bytes": 1048,
+     "sha256": "6ce553d16d6da670b3e5361603e1b629bfb0b81d134083420c14e7bafd55b46d"
+    }
+   ]
+  },
+  {
+   "id": "en_fresh",
+   "language": "en",
+   "length": "short",
+   "kind": "encyclopedic",
+   "about": "Lead prose of 5 English Wikipedia articles CREATED on 17/11/2026 (the English tables come from the 2023-11-01 dump, so these cannot be in them), retrieved 19/11/2026 through the MediaWiki API (plain text). Licence CC BY-SA 4.0, (c) English Wikipedia contributors.",
+   "texts": [
+    {
+     "name": "fresh_2026_crimean_bridge_explosions",
+     "file": "tools/compare_page/bench/texts/en_fresh/fresh_2026_crimean_bridge_explosions.txt",
+     "bytes": 813,
+     "sha256": "bb959fe63d5b9a0d716fcc54fab23115c931818cffc97135d6bbfb0d4851dc76",
+     "source": {
+      "title": "2026 Crimean Bridge explosions",
+      "url": "https://en.wikipedia.org/wiki/2026_Crimean_Bridge_explosions",
+      "created": "2026-11-17T19:29:04Z",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "fresh_digital_passport_russia",
+     "file": "tools/compare_page/bench/texts/en_fresh/fresh_digital_passport_russia.txt",
+     "bytes": 867,
+     "sha256": "fe41fe2ed514391f45a305a383b682e60cce38e67b84f275f7de2f1dbaa7e0f6",
+     "source": {
+      "title": "Digital passport (Russia)",
+      "url": "https://en.wikipedia.org/wiki/Digital_passport_%28Russia%29",
+      "created": "2026-11-17T10:45:24Z",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "fresh_edna_edgerton",
+     "file": "tools/compare_page/bench/texts/en_fresh/fresh_edna_edgerton.txt",
+     "bytes": 1087,
+     "sha256": "866c53d0fc251c9927ac31dbe02fabb7eaa66b3a1b76c55d8cf1c1819d625871",
+     "source": {
+      "title": "Edna Edgerton",
+      "url": "https://en.wikipedia.org/wiki/Edna_Edgerton",
+      "created": "2026-11-17T19:13:38Z",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "fresh_grindrod_limited",
+     "file": "tools/compare_page/bench/texts/en_fresh/fresh_grindrod_limited.txt",
+     "bytes": 1201,
+     "sha256": "93e12150ee3c55310c383ccb67ef2ed03dd509e3f9706e7f2171206df173a67d",
+     "source": {
+      "title": "Grindrod Limited",
+      "url": "https://en.wikipedia.org/wiki/Grindrod_Limited",
+      "created": "2026-11-17T18:26:37Z",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "fresh_murder_of_per_h_ggstr_m",
+     "file": "tools/compare_page/bench/texts/en_fresh/fresh_murder_of_per_h_ggstr_m.txt",
+     "bytes": 910,
+     "sha256": "40639e9002e1de8fca02e70e448eca93bf7c7b03583296d9c96aa1c724f2d7ff",
+     "source": {
+      "title": "Murder of Per Häggström",
+      "url": "https://en.wikipedia.org/wiki/Murder_of_Per_H%C3%A4ggstr%C3%B6m",
+      "created": "2026-11-17T14:21:21Z",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    }
+   ]
+  },
+  {
+   "id": "en_short",
+   "language": "en",
+   "length": "short",
+   "kind": "encyclopedic",
+   "about": "The lead of 12 well-known English Wikipedia articles, cut at a sentence end to 100-150 words, retrieved 19/11/2026 through the MediaWiki API (exintro, plain text). Their titles were excluded from the English training corpus - see the overlap check for what that does and does not prove. Licence CC BY-SA 4.0.",
+   "texts": [
+    {
+     "name": "en_short_bicycle",
+     "file": "tools/compare_page/bench/texts/en_short/en_short_bicycle.txt",
+     "bytes": 663,
+     "sha256": "f74ba08b83823fbdb89cd80b27a102c94ec471bbbc88555667988c97b7dbb337",
+     "source": {
+      "title": "Bicycle",
+      "url": "https://en.wikipedia.org/wiki/Bicycle",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "en_short_bread",
+     "file": "tools/compare_page/bench/texts/en_short/en_short_bread.txt",
+     "bytes": 642,
+     "sha256": "b81c0f655129fb7dba1f3c969798700eeaccf83be0465e0850540966716ee27d",
+     "source": {
+      "title": "Bread",
+      "url": "https://en.wikipedia.org/wiki/Bread",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "en_short_cat",
+     "file": "tools/compare_page/bench/texts/en_short/en_short_cat.txt",
+     "bytes": 685,
+     "sha256": "472ea653bd0716a146cf45d8e21591d4979d47c062e7881c112d507f51e9e354",
+     "source": {
+      "title": "Cat",
+      "url": "https://en.wikipedia.org/wiki/Cat",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "en_short_chocolate",
+     "file": "tools/compare_page/bench/texts/en_short/en_short_chocolate.txt",
+     "bytes": 709,
+     "sha256": "af1672da546efe99eea1d5a6bc91f08333bf5ca168d66a9ba3dd5d3fd9fa2a84",
+     "source": {
+      "title": "Chocolate",
+      "url": "https://en.wikipedia.org/wiki/Chocolate",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "en_short_coffee",
+     "file": "tools/compare_page/bench/texts/en_short/en_short_coffee.txt",
+     "bytes": 652,
+     "sha256": "db280650ed735c388462ef077a08be7322fd3b63050e0550b48cf887493f8e6c",
+     "source": {
+      "title": "Coffee",
+      "url": "https://en.wikipedia.org/wiki/Coffee",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "en_short_computer",
+     "file": "tools/compare_page/bench/texts/en_short/en_short_computer.txt",
+     "bytes": 744,
+     "sha256": "e8fbd898f98480feac5756f40b2a8718c556e64fa643e7f53482580eed906efe",
+     "source": {
+      "title": "Computer",
+      "url": "https://en.wikipedia.org/wiki/Computer",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "en_short_honey",
+     "file": "tools/compare_page/bench/texts/en_short/en_short_honey.txt",
+     "bytes": 670,
+     "sha256": "120b043585e37fdb08eb7e15e6cc11dc7de51f5d6f09f75aad6533d20b45fd28",
+     "source": {
+      "title": "Honey",
+      "url": "https://en.wikipedia.org/wiki/Honey",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "en_short_library",
+     "file": "tools/compare_page/bench/texts/en_short/en_short_library.txt",
+     "bytes": 736,
+     "sha256": "c803f664b80e4b95bae4d7bf615d1c8dc63ee0749e3792eaf69bc773591ad586",
+     "source": {
+      "title": "Library",
+      "url": "https://en.wikipedia.org/wiki/Library",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "en_short_lighthouse",
+     "file": "tools/compare_page/bench/texts/en_short/en_short_lighthouse.txt",
+     "bytes": 668,
+     "sha256": "d486a7d285a6a942866eeed3ea348c606c520a939cae95e711afde4f3062f1b9",
+     "source": {
+      "title": "Lighthouse",
+      "url": "https://en.wikipedia.org/wiki/Lighthouse",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "en_short_moon",
+     "file": "tools/compare_page/bench/texts/en_short/en_short_moon.txt",
+     "bytes": 643,
+     "sha256": "c5b25cf793e7afb3ef29885cf56c659ccf6a908a547c96e5249c1180bb81ccf1",
+     "source": {
+      "title": "Moon",
+      "url": "https://en.wikipedia.org/wiki/Moon",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "en_short_rain",
+     "file": "tools/compare_page/bench/texts/en_short/en_short_rain.txt",
+     "bytes": 701,
+     "sha256": "991721ecf8088b4f29954b1ec84a44ab1f9dfc1b0165af9bbd9d646e8e2881b0",
+     "source": {
+      "title": "Rain",
+      "url": "https://en.wikipedia.org/wiki/Rain",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "en_short_volcano",
+     "file": "tools/compare_page/bench/texts/en_short/en_short_volcano.txt",
+     "bytes": 716,
+     "sha256": "1e28a0b08336c682e07a507a5e8ccbd71046e69bdcca848c7df490897b12f6bf",
+     "source": {
+      "title": "Volcano",
+      "url": "https://en.wikipedia.org/wiki/Volcano",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    }
+   ]
+  },
+  {
+   "id": "en_long_fresh",
+   "language": "en",
+   "length": "long",
+   "kind": "encyclopedic",
+   "about": "One long (1,845 words) English Wikipedia article created on 14/11/2026, revision 1385874971 (15/11/2026), MediaWiki API plain text; headings and lines under 8 words dropped, stops at See also / References. Licence CC BY-SA 4.0.",
+   "texts": [
+    {
+     "name": "fresh_barcelonnette_stores",
+     "file": "tools/compare_page/bench/texts/en_long_fresh/fresh_barcelonnette_stores.txt",
+     "bytes": 11217,
+     "sha256": "b1560d2dd08331dd1c5eb201321a9c6239b30d122626ce91abd9c5ab6717c0e4",
+     "source": {
+      "title": "Barcelonnette department stores of Mexico",
+      "url": "https://en.wikipedia.org/wiki/Barcelonnette_department_stores_of_Mexico",
+      "created": "2026-11-14T01:00:32Z",
+      "revision": 1385874971,
+      "retrieved": "2026-11-19"
+     }
+    }
+   ]
+  },
+  {
+   "id": "en_long",
+   "language": "en",
+   "length": "long",
+   "kind": "encyclopedic",
+   "about": "4 long English Wikipedia articles, whole paragraphs up to 1,000-2,000 words, retrieved 19/11/2026 (MediaWiki API, plain text). Titles excluded from the training corpus. Licence CC BY-SA 4.0.",
+   "texts": [
+    {
+     "name": "en_long_elephant",
+     "file": "tools/compare_page/bench/texts/en_long/en_long_elephant.txt",
+     "bytes": 12435,
+     "sha256": "c43e9af73bef050e09353cffdfd3e1d6a3d3469561842d97137d8ff50a9df4c3",
+     "source": {
+      "title": "Elephant",
+      "url": "https://en.wikipedia.org/wiki/Elephant",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "en_long_paper",
+     "file": "tools/compare_page/bench/texts/en_long/en_long_paper.txt",
+     "bytes": 12108,
+     "sha256": "a2a2487631d31d487f413ae68194f8286089e9904c113cbe1faa800febe1bf5b",
+     "source": {
+      "title": "Paper",
+      "url": "https://en.wikipedia.org/wiki/Paper",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "en_long_printing_press",
+     "file": "tools/compare_page/bench/texts/en_long/en_long_printing_press.txt",
+     "bytes": 11440,
+     "sha256": "25c2292a7f68541ac5b88f7b84812b5496ecc17d0606af81840e0351adfd21db",
+     "source": {
+      "title": "Printing press",
+      "url": "https://en.wikipedia.org/wiki/Printing_press",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    },
+    {
+     "name": "en_long_tea",
+     "file": "tools/compare_page/bench/texts/en_long/en_long_tea.txt",
+     "bytes": 11693,
+     "sha256": "a90d7791a1a16ca03c5d1912fe7f457285d7467c1e062eb042cb4f3a6c6b610c",
+     "source": {
+      "title": "Tea",
+      "url": "https://en.wikipedia.org/wiki/Tea",
+      "retrieved": "2026-11-19",
+      "revision": null
+     }
+    }
+   ]
+  }
+ ]
+}

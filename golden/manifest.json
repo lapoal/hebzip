@@ -1,0 +1,421 @@
+{
+ "modes": {
+  "en_fast": {
+   "id": 6,
+   "packages": {
+    "own_en_note": {
+     "bytes": 185,
+     "sha256": "5b297949b4eec248f7dec5a572afde5e55297951722069b53cade03596b3c203"
+    },
+    "own_en_story": {
+     "bytes": 359,
+     "sha256": "9784e92eec1e1b17de5a4d9f330e22a31993f0847938e8e6681b9f806668ee50"
+    }
+   },
+   "signature_byte": 158,
+   "texts": "en"
+  },
+  "en_max": {
+   "id": 7,
+   "packages": {
+    "own_en_note": {
+     "bytes": 181,
+     "sha256": "516d501371d0910783f120f92072755d4fa6c9e5ce715469fce0fdfcf54dbc3f"
+    },
+    "own_en_story": {
+     "bytes": 347,
+     "sha256": "ed692caa03f7eb495b2be0fd98e48f6467bf83cf044aa5f7bc12a70c749cfdfe"
+    }
+   },
+   "signature_byte": 157,
+   "texts": "en"
+  },
+  "fast": {
+   "id": 1,
+   "packages": {
+    "own_diary": {
+     "bytes": 488,
+     "sha256": "248756cfcc7f1fa3919e3112897c6b4ebb1a9ae9c44cbe2ab61222f8a35cddfa"
+    },
+    "own_journal": {
+     "bytes": 3990,
+     "sha256": "6cef2e349e3ccc98f10dd946581bfcadecc500fb9f9f9ce40127504a73748be4"
+    },
+    "own_letter": {
+     "bytes": 280,
+     "sha256": "7eb0cba5e6eb727f299ec87d585a4b54d85a6e52322311615bf665770a331da0"
+    },
+    "own_message": {
+     "bytes": 202,
+     "sha256": "a5c22932a56f098e5b276e7dd57e31ab2da685e721222ed803bae04ad926a475"
+    },
+    "own_moving": {
+     "bytes": 1591,
+     "sha256": "d922035e0b7c81399ff2252669c23097da18138d3dc9ddb4cd3f01d733489561"
+    },
+    "own_notice": {
+     "bytes": 211,
+     "sha256": "7e1c7c8269bf1298b576f40056e1f3e5820becf41bdff0202745990e8e7fb0ac"
+    },
+    "own_page": {
+     "bytes": 630,
+     "sha256": "4b871194087951e03b40b3b795a2d601ea5750e9f8c2624a3c99d99d443fa32b"
+    },
+    "own_story": {
+     "bytes": 370,
+     "sha256": "786610d335525a16384fcd56070f5a3eafec59548279b94e7ed9739f9735b027"
+    },
+    "wiki_bicycle": {
+     "bytes": 255,
+     "sha256": "b1e2343181e484f27bfb22ac338abc39512c7aaa187ce531b2cbd3df6112580d"
+    },
+    "wiki_cat": {
+     "bytes": 337,
+     "sha256": "7a8b988a36732e991041af333f78e88a26fec7391475aec930b6a5324bf237b1"
+    },
+    "wiki_chocolate": {
+     "bytes": 535,
+     "sha256": "4360c9f75d15263c54c962eba695b1bf6714bfc90c6248742f82351e2137a524"
+    },
+    "wiki_computer": {
+     "bytes": 237,
+     "sha256": "8be0a6804ad8579456bf9df4f506bb6955eebf0963bad8a752be8fcfd93a4baf"
+    },
+    "wiki_rain": {
+     "bytes": 497,
+     "sha256": "479b904bcccd3535198b02256b51867bb29b0e5b4ac9139484ab17a65ee45696"
+    }
+   },
+   "signature_byte": 148,
+   "texts": "he"
+  },
+  "generic": {
+   "id": 3,
+   "packages": {
+    "own_diary": {
+     "bytes": 786,
+     "sha256": "247442aebdaf8eb817d33f5f128a76bef48ae2bf09a807882863a867d8c9ff68"
+    },
+    "own_journal": {
+     "bytes": 4820,
+     "sha256": "d239ca576f3162d9c9a680d742e2f53d54639ff1f058395adba5d9b07230feac"
+    },
+    "own_letter": {
+     "bytes": 499,
+     "sha256": "748e9ca24a535807feb7da75fefd8399eee7968de1c973b7a9d58fc00249873b"
+    },
+    "own_message": {
+     "bytes": 339,
+     "sha256": "8fc46c9cb7860c8d9799bfb6ff83f77f3c697c092492490ecc36ebad59e8ddca"
+    },
+    "own_moving": {
+     "bytes": 2184,
+     "sha256": "ebded8997163984efa7d7df7edcd6323971ce0666cfde092e21f8387299efd0a"
+    },
+    "own_notice": {
+     "bytes": 359,
+     "sha256": "e87d2c2491ccbe4e41d7922173234fb6ebd0919af2dcece214ef5a16f2736be6"
+    },
+    "own_page": {
+     "bytes": 970,
+     "sha256": "7e76352028e0bfbd69e6ef80ebd93af5f1254c4dba59bc6d56ca37b41fb2a4cf"
+    },
+    "own_story": {
+     "bytes": 577,
+     "sha256": "965797e88e27f36f29218612d7f6c577efa6ea81b342ea751608a5147dd23036"
+    },
+    "wiki_bicycle": {
+     "bytes": 470,
+     "sha256": "4d80ed5890384d8e9f417492cc0c1da3538aca6f168d7ac877e74a1e69496043"
+    },
+    "wiki_cat": {
+     "bytes": 630,
+     "sha256": "ceda1338c01ab4aa3a58df948d1d1b95f7481dc722f0b0f6c441b47bc55fed7f"
+    },
+    "wiki_chocolate": {
+     "bytes": 804,
+     "sha256": "257f58056afa0a4a27301efd8bd855dcab03b03633f8573bcad0e7b042c9f3be"
+    },
+    "wiki_computer": {
+     "bytes": 479,
+     "sha256": "03317d3fa8ffc05a1ea54ef3acde39c4c09d425778adaeb437cb3c32796ffe08"
+    },
+    "wiki_rain": {
+     "bytes": 782,
+     "sha256": "7bd0641979490ad08e36b333301e24bbf67517dd2e74f4c9ca658ad6c5bcbc8f"
+    }
+   },
+   "signature_byte": 102,
+   "texts": "he"
+  },
+  "latin_fast": {
+   "id": 4,
+   "packages": {
+    "bridge": {
+     "bytes": 55,
+     "sha256": "cf282ebc6335a95ce167b42795902077609be1a7e5205d646410394f4e6eb413"
+    },
+    "market": {
+     "bytes": 180,
+     "sha256": "87df9f8e87eeafedb8d67f6fcc47b33c66b4e7e768131fb64219223b1f41bf65"
+    },
+    "winter": {
+     "bytes": 64,
+     "sha256": "aa7b7663a2f618d25bc8791db5c2142626a247b568b772b1d675d1b9013190b9"
+    }
+   },
+   "signature_byte": 50,
+   "texts": "latin_toy"
+  },
+  "latin_max": {
+   "id": 5,
+   "packages": {
+    "bridge": {
+     "bytes": 54,
+     "sha256": "5c23673f2641def241adb9c85715ee51520c457c39ea315e6a9d1f1748518caf"
+    },
+    "market": {
+     "bytes": 179,
+     "sha256": "749a9bd45e24275568ed566dddb6b51229d002526595d641b587d1e6b18ab1c9"
+    },
+    "winter": {
+     "bytes": 62,
+     "sha256": "9ea1424cf85a86f7a8dfd55ca8597b2091e53315ddc891434a4a0e9a4dde385e"
+    }
+   },
+   "signature_byte": 233,
+   "texts": "latin_toy"
+  },
+  "max": {
+   "id": 2,
+   "packages": {
+    "own_diary": {
+     "bytes": 478,
+     "sha256": "91bd9eb356eb24a3edebdaa7b7e04359bb18250318a93ff131e7d9efedc8fcdc"
+    },
+    "own_journal": {
+     "bytes": 3832,
+     "sha256": "ec8dce42a128e215c6c662c75398c65c9f941762cadebcb879a0aca43987b385"
+    },
+    "own_letter": {
+     "bytes": 276,
+     "sha256": "86d330be1e642a8588c63fe62c3e5627a4bf87d66bee2f030d605d4f1a488b81"
+    },
+    "own_message": {
+     "bytes": 201,
+     "sha256": "bf4d040be907790929df0ddeae17d58f84123ae1a2f6b51224127894c22e32ae"
+    },
+    "own_moving": {
+     "bytes": 1557,
+     "sha256": "dafd5b5b260f1bf585f78aeee942ea268c621d3c5c2a0ec954f906497d222b09"
+    },
+    "own_notice": {
+     "bytes": 207,
+     "sha256": "4235c8388540c2b7aa756d8796473c4734b1144e9bf4eb536ac1c365ddd1e627"
+    },
+    "own_page": {
+     "bytes": 617,
+     "sha256": "b747f8859fe50b53de87539be1e98ae163e3b9930ab8b629d8d0629bab40b7a9"
+    },
+    "own_story": {
+     "bytes": 366,
+     "sha256": "81b4b6b15a96bccf2d6df81bc1120be7c8d7625f7c3877c228fb6663c712ef8f"
+    },
+    "wiki_bicycle": {
+     "bytes": 248,
+     "sha256": "c482f7f93e95b5c602d8b7446a467ad3f6239a4f303debaa51a13c82ac2713a9"
+    },
+    "wiki_cat": {
+     "bytes": 333,
+     "sha256": "2601ca0352fa74444b17c0372941d353b4cdb826f4a6a5c59e5735e7e7c096de"
+    },
+    "wiki_chocolate": {
+     "bytes": 516,
+     "sha256": "8bbf04f5c2222260c841fd9b6285a008315ffb9cb9058585055e51fdee011135"
+    },
+    "wiki_computer": {
+     "bytes": 229,
+     "sha256": "1959dbdfd8fb1dfddeacec50456e988c92e0f122421d2e02ae027a49c851a743"
+    },
+    "wiki_rain": {
+     "bytes": 479,
+     "sha256": "bb3abc700a00976a283da2885c83842a9df291058c82dbaea5be07570e226288"
+    }
+   },
+   "signature_byte": 129,
+   "texts": "he"
+  },
+  "max_plus": {
+   "id": 8,
+   "packages": {
+    "own_diary": {
+     "bytes": 470,
+     "sha256": "774bf52fdc28c645e8bd8e3e8a9c77fe73a579246ae86977c7521e54c9f167ae"
+    },
+    "own_journal": {
+     "bytes": 3770,
+     "sha256": "617a17ea2ec9ed5848906c1d18697af3b791055e464781dc7b800765de091561"
+    },
+    "own_letter": {
+     "bytes": 273,
+     "sha256": "da17371392301410ea780db80ed1aa32d7823131f42ec67c64864fe1571122a0"
+    },
+    "own_message": {
+     "bytes": 198,
+     "sha256": "b787ee2dd226efae84ce94c47fbb2312aca0c3f5ca37434c5fb3c8b18b7e7849"
+    },
+    "own_moving": {
+     "bytes": 1534,
+     "sha256": "317f3b947c1f8580cdccad0aebc6f01b6b8e9a4690927a9814df9cf0a0f0775f"
+    },
+    "own_notice": {
+     "bytes": 202,
+     "sha256": "4fd6531fcaf5566a96661af72863fd5173f8877673d4ee7527b15c10621076ff"
+    },
+    "own_page": {
+     "bytes": 602,
+     "sha256": "a484209c9a2e01509293cafa7cde81ec73a861b3ec645fedb406d4006571f831"
+    },
+    "own_story": {
+     "bytes": 358,
+     "sha256": "da19e1d049e6eec395063d1cf3d17180125f87b45b325961275cf764842379ab"
+    },
+    "wiki_bicycle": {
+     "bytes": 241,
+     "sha256": "a0c112a4e7c33899fd61acb160d85184c0992b56ada8b78920efaeaa09e47512"
+    },
+    "wiki_cat": {
+     "bytes": 324,
+     "sha256": "baae08acb69ff9d86176a2497a1ecd832950f69a9cf194e14d5314c0eb513ff6"
+    },
+    "wiki_chocolate": {
+     "bytes": 501,
+     "sha256": "af029e9c8699faa5e274edbd8f8801b15c884ed3dd603c30be5fb12259555f23"
+    },
+    "wiki_computer": {
+     "bytes": 225,
+     "sha256": "001eb37cea30630960801fd8172951dece11b825d924c0c74e3231715b12b420"
+    },
+    "wiki_rain": {
+     "bytes": 462,
+     "sha256": "b13c2ff81c31e3a39e7e362e507fe724548977f8472db3d5590a77bb72c89b23"
+    }
+   },
+   "signature_byte": 92,
+   "texts": "he"
+  }
+ },
+ "numpy": "2.5.2",
+ "python": "3.12.10",
+ "texts": {
+  "bridge": {
+   "bytes": 247,
+   "chars": 247,
+   "path": "langpacks/latin_toy/samples/bridge.txt",
+   "sha256": "7acb5a0fcc025fa98ceb9aa232a997f7f336d892dd2ea3bcaeeb0bca42cf71dc"
+  },
+  "market": {
+   "bytes": 358,
+   "chars": 357,
+   "path": "langpacks/latin_toy/samples/market.txt",
+   "sha256": "5f552f139dd24cd132b60c8a563b2d25909a4b65fb726de6b34918091c468813"
+  },
+  "own_diary": {
+   "bytes": 2594,
+   "chars": 1466,
+   "path": "golden/texts/own_diary.txt",
+   "sha256": "dbb181e627afbc2491fafaf1732c0cfc6e61d2a58bd72156c2bc969807fc95cd"
+  },
+  "own_en_note": {
+   "bytes": 612,
+   "chars": 612,
+   "path": "golden/texts_en/own_en_note.txt",
+   "sha256": "d07bc1185c83910b2dbcaf1a80f5ad230e3ddf2d49a5ef3a4168e535f3bdee85"
+  },
+  "own_en_story": {
+   "bytes": 1318,
+   "chars": 1318,
+   "path": "golden/texts_en/own_en_story.txt",
+   "sha256": "5ac625e2d4f755e131b8165c4e2240b2ee25aee4edb64201919dbd15d59a7192"
+  },
+  "own_journal": {
+   "bytes": 21904,
+   "chars": 12466,
+   "path": "golden/texts/own_journal.txt",
+   "sha256": "3b3a986114bb4e135be55d0970ba56b5691114875cd7d65c8e118c5a8827cd89"
+  },
+  "own_letter": {
+   "bytes": 1459,
+   "chars": 822,
+   "path": "golden/texts/own_letter.txt",
+   "sha256": "031a305ac3d61b38f1754f7a1253e019b9d4d819af6a7e6bda2e7aa4291cf2b7"
+  },
+  "own_message": {
+   "bytes": 940,
+   "chars": 532,
+   "path": "golden/texts/own_message.txt",
+   "sha256": "e74ccc621eb1eb54ee784e7514b5ee35ed0ea06ab9337c04ae6c76c9634a08e0"
+  },
+  "own_moving": {
+   "bytes": 8629,
+   "chars": 4873,
+   "path": "golden/texts/own_moving.txt",
+   "sha256": "2ff5939669804163b254ef7e4d97f528c2ecee1ac61cc1e15b47d4613048db0e"
+  },
+  "own_notice": {
+   "bytes": 995,
+   "chars": 570,
+   "path": "golden/texts/own_notice.txt",
+   "sha256": "906a32cbbf8838cdb91abb151e9c196453555600267bc5e6591369201a0ccfdd"
+  },
+  "own_page": {
+   "bytes": 3506,
+   "chars": 1981,
+   "path": "golden/texts/own_page.txt",
+   "sha256": "e0239a7a6405355253e90210fc4c33c43a044b8cea341575eaea80aa07b8d4a8"
+  },
+  "own_story": {
+   "bytes": 1819,
+   "chars": 1046,
+   "path": "golden/texts/own_story.txt",
+   "sha256": "ad52215ad9cadf6738cb667f26c9fdaa754a702a9a52b8fa7db8bab6d5add7b6"
+  },
+  "wiki_bicycle": {
+   "bytes": 1551,
+   "chars": 864,
+   "path": "golden/texts/wiki_bicycle.txt",
+   "sha256": "1da54487cfa68cb5de67fff1528241ed2cdd25d7db7e4ccdfd660fafec900e58"
+  },
+  "wiki_cat": {
+   "bytes": 2036,
+   "chars": 1151,
+   "path": "golden/texts/wiki_cat.txt",
+   "sha256": "8fdca435c6669a60f6cb6e82e4d17cf59da2e43a08b6a210d7d9ed7958dd3e1f"
+  },
+  "wiki_chocolate": {
+   "bytes": 2609,
+   "chars": 1501,
+   "path": "golden/texts/wiki_chocolate.txt",
+   "sha256": "f2abb27ba6fb9b0eb77f57494f440e9213d5dfab7cea9e8bf11dfe4bc338ba43"
+  },
+  "wiki_computer": {
+   "bytes": 1518,
+   "chars": 843,
+   "path": "golden/texts/wiki_computer.txt",
+   "sha256": "98edeb689c2205b17ed4196acaf951ce3846f6d8116d2d802c7ba28a7830d0ee"
+  },
+  "wiki_rain": {
+   "bytes": 2716,
+   "chars": 1508,
+   "path": "golden/texts/wiki_rain.txt",
+   "sha256": "1ef3d475b64c767c6a4bcc6117cb7d88b23f8b0b177e17152ea9e5652ee74b10"
+  },
+  "winter": {
+   "bytes": 218,
+   "chars": 218,
+   "path": "langpacks/latin_toy/samples/winter.txt",
+   "sha256": "8669124370c0127bcb93740272beafe26e9b2a593daf7f58c578713daa4900c3"
+  }
+ },
+ "what": "hebzip golden set: the packages the real CLI must reproduce byte for byte"
+}

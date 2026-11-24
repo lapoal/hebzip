@@ -1,0 +1,62 @@
+Paper is a thin sheet of matted cellulose fibers. Largely derived from lignocellulose, paper is created from a pulp dissolved into a slurry that is drained and dried into sheets. Different types of paper are defined by constituent fiber, paper pulp, sizing, coating, paper size, paper density and grammage.
+The papermaking process developed in East Asia at least as early as 105 CE by the Han court eunuch Cai Lun, although archaeological evidence exists of 2nd century BCE paper-like material in China. Before the industrialization of paper production, the most common paper was rag paper, made from discarded natural fiber textiles collected by ragpickers. The 1843 invention of wood pulp, coupled with the Second Industrial Revolution, made pulpwood paper the dominant variety to this day.
+
+Etymology
+The word paper is etymologically derived from Latin papyrus, which comes from the Greek πᾰ́πῡρος (pápūros), the word for the Cyperus papyrus plant. Papyrus is a thick, paper-like material produced from the pith of the Cyperus papyrus plant, which was used in ancient Egypt and other Mediterranean cultures for writing before the introduction of paper. Although the word paper is etymologically derived from papyrus, the two are separate technological developments that use different materials and production methods. Papyrus is a lamination of natural plant fibre, while paper is manufactured from fibres whose properties have been changed by maceration.
+
+History
+
+Precursors
+Paper was preceded by and coexisted with other early writing materials, such as papyrus, parchment, vellum, barkcloth, birch bark, palm leaves, and bamboo and wooden slips.
+Papyrus, superficially similar to paper, has several downsides that eventually caused it to be replaced by paper: It was geographically limited to a plant primarily grown in Egypt; it was both more expensive and laborious to produce compared to paper; and it was more fragile and sensitive to moisture, making it prone to break apart in damp conditions.
+
+Invention and development
+The oldest known archaeological fragments of the immediate precursor to modern paper date to the 2nd century BCE in China. The pulp papermaking process is ascribed to Cai Lun, a 2nd-century CE Han court eunuch.
+Popular history points to the Battle of Talas in 751 CE as the moment when papermaking spread to the Islamic world, claiming that Tang dynasty papermakers were captured as prisoners and used to extract 'the secrets' of papermaking. However, an archive of 76 paper writings in Sogdian, Arabic, and Chinese has been found in Panjikent, left behind by the ruler Divashtich before the city's capture by Arabs in 722. When Muslims first encountered paper in the 7th and 8th centuries, it had already been in the region for centuries. Sogdian writing on paper has also been found dating to 313 CE in Dunhuang. Paper was being made in Baghdad by the late 8th century.
+In the 13th century, knowledge of and use of paper spread from the Middle East to medieval Europe, where the first water-powered paper mills were built. Because paper was introduced to the West through the city of Baghdad, it was first called bagdatikos.
+In the 19th century, industrialization greatly reduced the cost of manufacturing paper. In 1844, the Canadian inventor Charles Fenerty and the German inventor Friedrich Gottlob Keller independently developed processes for pulping wood fibres.
+
+Papermaking
+
+Pulp
+Pulp is a lignocellulosic mixture of isolated fibers. Traditional low-lignin pulp sources like rags and paper mulberry can be mechanically broken down; industrial pulpmaking largely makes use of pulpwood, which can be pulped chemically or mechanically.
+
+Chemical pulping
+To make pulp from wood, a chemical pulping process separates lignin from cellulose fibre. A cooking liquor is used to dissolve the lignin, which is then washed from the cellulose; this preserves the length of the cellulose fibres. Paper made from chemical pulps is also known as wood-free paper (not to be confused with tree-free paper), because it does not contain lignin, which deteriorates over time. The pulp can also be bleached to produce white paper, but this consumes 5% of the fibres. Chemical pulping processes are not used to make paper made from cotton, which is already 90% cellulose.
+
+There are three main chemical pulping processes: the sulfite process dates back to the 1840s and was the dominant method before the Second World War. The kraft process, invented in the 1870s and first used in the 1890s, is now the most commonly practised strategy; one of its advantages is that the chemical reaction with lignin produces heat, which can be used to run a generator. Most pulping operations using the kraft process are net contributors to the electricity grid or use the electricity to run an adjacent paper mill. Another advantage is that this process recovers and reuses all inorganic chemical reagents. Soda pulping is another specialty process used to pulp straws, bagasse and hardwoods with high silicate content.
+
+Mechanical pulping
+There are two major mechanical pulps: thermomechanical pulp (TMP) and groundwood pulp (GW). In the TMP process, wood is chipped and then fed into steam-heated refiners, where the chips are squeezed and converted to fibres between two steel discs. In the groundwood process, debarked logs are fed into grinders, where they are pressed against rotating stones to produce fibres. Mechanical pulping does not remove the lignin, so the yield is very high (>95%); however, lignin causes the paper thus produced to turn yellow and become brittle over time. Mechanical pulps have rather short fibres, thus producing weak paper. Although large amounts of electrical energy are required to produce mechanical pulp, it costs less than the chemical kind.
+
+Recycling and de-inked pulp
+A process for removing printing inks from recycled paper was invented by German jurist Justus Claproth in 1774. Today this method is called deinking.
+Paper recycling processes can use either chemically or mechanically produced pulp; by mixing it with water and applying mechanical action, the hydrogen bonds in the paper can be broken and fibres separated again. Most recycled paper contains a proportion of virgin fibre for the sake of quality; generally speaking, de-inked pulp is of the same quality or lower than the collected paper it was made from.
+There are three main classifications of recycled fibre:
+
+Mill broke or internal mill waste – This incorporates any substandard or grade-change paper made within the paper mill itself, which then goes back into the manufacturing system to be re-pulped back into paper. Such out-of-specification paper is not sold and is therefore often not classified as genuine reclaimed recycled fibre; however, most paper mills have been reusing their own waste fibre for many years, long before recycling became popular.
+Preconsumer waste – This is offcut and processing waste, such as guillotine trims and envelope blank waste; it is generated outside the paper mill and could potentially go to landfill, and is a genuine recycled fibre source; it includes de-inked preconsumer waste (recycled material that has been printed but did not reach its intended end use, such as waste from printers and unsold publications).
+Postconsumer waste – This is fibre from paper that has been used for its intended end use and includes office waste, magazine papers and newsprint. As the vast majority of this material has been printed – either digitally or by more conventional means such as lithography or rotogravure – it will either be recycled as printed paper or go through a de-inking process first.
+Recycled papers can be made from 100% recycled materials or blended with virgin pulp, although they are (generally) not as strong nor as bright as papers made from the latter.
+
+Producing paper
+The pulp is fed to a paper machine, where it is formed into a paper web, and the water is removed by pressing and drying.
+Pressing the sheet removes the water by force. Once the water is forced from the sheet, a special kind of felt, not to be confused with the traditional one, is used to collect it. When making paper by hand, a blotter sheet is used instead.
+Drying involves using air or heat to remove water from the paper sheets. In the earliest days of papermaking, this was done by hanging the sheets like laundry; in more modern times, various forms of heated drying mechanisms are used. On the paper machine, the most common is the steam-heated can dryer. These can reach temperatures above 93 °C (200 °F) and are used in long sequences of more than forty cans where the heat produced by these can easily dry the paper to less than six percent moisture.
+
+Paper grain
+All paper produced by paper machines, such as the Fourdrinier machine, is woven paper, i.e., the wire mesh that transports the web leaves a pattern that has the same density along the paper grain and across the grain. Textured finishes, watermarks, and wire patterns imitating handmade laid paper can be created using appropriate rollers in the later stages of the machine.
+Wove paper does not exhibit "laidlines", which are small, regular lines left behind on paper when it was handmade in a deckle mould made from rows of metal wires or bamboo. Laidlines are very close together. They run perpendicular to the "chainlines", which are further apart. Handmade paper similarly exhibits "deckle edges", or rough and feathery borders.
+
+Sizing and finishing
+Papers may have their surfaces polished by calendering or burnishing. Paper can be further processed into coated paper by sizing it with a thin layer of material, such as calcium carbonate or kaolin, applied to one or both sides. This treatment alters the paper's final feel, improving its characteristics for specific purposes, such as preventing ink from running on printer paper.
+The paper is then fed onto reels if it is to be used on web printing presses, or cut into sheets for other printing processes or other purposes. Sheets are usually cut "long-grain", i.e., with the grain parallel to the sheet's longer dimension. Continuous form paper (or continuous stationery) is cut to width with holes punched at the edges, and folded into stacks.
+
+Applications
+It is estimated that paper-based storage solutions captured 0.33% of the total in 1986 and only 0.007% in 2007, even though, in absolute terms, the world's capacity to store information on paper increased from 8.7 to 19.4 petabytes. It is estimated that in 1986 paper-based postal letters represented less than 0.05% of the world's telecommunication capacity, with a sharply decreasing tendency after the massive introduction of digital technologies.
+Paper has a major role in the visual arts. It is used by itself to form two- and three-dimensional shapes and collages. It has also evolved to being a structural material used in furniture design. Watercolor paper has a long history of production and use.
+
+Types, thickness, and weight
+The thickness of paper is often measured with a caliper, which is typically given in thousandths of an inch in the United States and in micrometres (μm) elsewhere. Paper may be between 0.07 and 0.18 millimetres (0.0028 and 0.0071 in) thick.
+Paper is often characterized by weight. In the United States, weight refers to the weight of a ream (bundle of 500 sheets) of varying "basic sizes" before the paper is cut to the size it is sold to end customers. For example, a ream of 20 lb, 8.5 in × 11 in (216 mm × 279 mm) paper weighs 5 pounds because it has been cut from larger sheets into four pieces. In the United States, printing paper is generally 20 lb, 24 lb, 28 lb, or 32 lb at most. Cover stock is generally 68 lb, and 110 lb or more is considered card stock.
+In Europe and other regions that use the ISO 216 paper-sizing system, the weight is expressed in grams per square metre (g/m2, usually gsm). Printing paper is generally between 60 gsm and 120 gsm. Anything heavier than 160 gsm is considered card. The weight of a ream, therefore, depends on the dimensions of the paper and its thickness.

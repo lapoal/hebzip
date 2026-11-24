@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>השוואת דחיסה</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="container topbar-inner">
+    <span class="logo" aria-hidden="true"></span>
+    <h1>השוואת דחיסה</h1>
+    <span class="Label">מקומי</span>
+  </div>
+</header>
+
+<main class="container">
+  <section class="Box" aria-labelledby="up-title">
+    <div class="Box-header"><h2 id="up-title">בחר קובץ להשוואה</h2></div>
+    <div class="Box-body">
+      <label id="drop" class="drop" for="file">
+        <input id="file" type="file" accept=".txt,.docx">
+        <span class="drop-main">גרור לכאן קובץ, או <span class="link">לחץ לבחירה</span></span>
+        <span class="drop-sub">קובץ <bdi dir="ltr">.txt</bdi> (<bdi dir="ltr">UTF-8</bdi>) או <bdi dir="ltr">.docx</bdi> · עד <span id="limit">200</span> KB של טקסט</span>
+      </label>
+      <div id="flash" class="flash" role="alert" hidden></div>
+    </div>
+    <div id="tool-state" class="Box-row tool-state" aria-live="polite" hidden></div>
+  </section>
+
+  <section id="result" class="Box" hidden aria-live="polite">
+    <div class="Box-header facts">
+      <div class="fact"><span class="fact-k">קובץ</span><bdi id="f-name" class="fact-v"></bdi></div>
+      <div class="fact"><span class="fact-k">גודל הטקסט</span><span id="f-size" class="fact-v num"></span></div>
+      <div class="fact"><span class="fact-k">מילים</span><span id="f-words" class="fact-v num"></span></div>
+    </div>
+    <div class="Box-row summary" id="summary"></div>
+    <div class="Box-row running" id="running" hidden>
+      <span class="spinner" aria-hidden="true"></span>
+      <span>רץ עכשיו: <strong id="running-name"></strong></span>
+      <span class="muted" id="pending"></span>
+    </div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">כלי</th>
+            <th scope="col" class="n">גודל (בתים)</th>
+            <th scope="col" class="n">חיסכון מול המקור</th>
+            <th scope="col" class="n">מול ZIP</th>
+            <th scope="col" class="n">זמן דחיסה</th>
+            <th scope="col" class="n">זמן פתיחה</th>
+            <th scope="col">בדיקת פתיחה</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="note">
+    <p>הכלים שרצו:</p>
+    <ul id="versions" class="versions"></ul>
+    <p id="timing-note" hidden></p>
+    <p>כל הכלים רצו על המחשב הזה. שום דבר לא נשלח החוצה, והקובץ וכל העותקים שלו נמחקים מיד בסוף ההשוואה.</p>
+  </footer>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

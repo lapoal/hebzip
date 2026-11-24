@@ -1,0 +1,33 @@
+# What the website build takes from the repository (python tools/site/build_site.py - see tools/site/README.md).
+# The page files themselves (site/index.html, site/assets/*, site/settings.json) are written by hand;
+# everything below is GENERATED into site/ so the website never drifts from the code, the config or the bench.
+
+[site]
+out = "site"                      # the folder GitHub Pages serves as-is
+modes = ["fast", "en_fast"]       # the modes the browser runs (Hebrew / English pack; tables copied into site/tables)
+package = "hebzip"                # the code, zipped into site/py/hebzip.zip (every .py file, nothing else)
+table_docs = ["tables/LICENSE", "tables/CREDITS.md", "tables/wiki_titles_he.txt", "tables/wiki_titles_en.txt"]   # shipped with the tables
+
+# The two sample buttons: texts written for this project (golden/TEXTS-ABOUT.txt), shipped as-is.
+[site.samples]
+he = "golden/texts/own_message.txt"
+en = "golden/texts_en/own_en_note.txt"
+
+# The [hebzip] rows the browser config changes (python -m hebzip.ops.config_subset). Why each one:
+[site.rows]
+engine = "python"                 # no numba in the browser (same kernels, same bytes)
+table_store = "eager"             # no memory-mapped copy in the browser's in-memory file system
+fallback = []                     # no generic fallback: its zstandard / pyppmd codecs do not exist in Pyodide
+fallback_policy = "on_error"
+signature_cache = ""              # nothing is cached between page visits by hebzip itself
+verify_roundtrip = false          # the page decompresses every package itself and compares (shown to the user)
+
+[pyodide]
+version = "314.0.8"               # Python 3.14.2 in WebAssembly (MPL-2.0); copied unmodified from its release
+files = ["pyodide.mjs", "pyodide.asm.mjs", "pyodide.asm.wasm", "python_stdlib.zip", "pyodide-lock.json"]
+packages = ["numpy"]              # wheels named in pyodide-lock.json, copied next to it
+notices = ["tools/site/licences/LICENSE-MPL-2.0.txt", "tools/site/licences/LICENSE-CPython.txt",
+           "tools/site/licences/NOTICE-pyodide.txt"]
+
+[bench]
+results = "tools/compare_page/bench/results"   # summary.json + bench.json of `python -m atar.bench run`

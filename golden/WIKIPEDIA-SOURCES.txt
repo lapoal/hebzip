@@ -1,0 +1,19 @@
+Test texts taken from Hebrew Wikipedia (golden/texts/wiki_*.txt)
+===============================================================
+
+Each file is the opening part of one Hebrew Wikipedia article, retrieved in November 2026.
+Unmodified except for whitespace and the removal of section headings.
+
+Licence: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0),
+https://creativecommons.org/licenses/by-sa/4.0/
+(c) Hebrew Wikipedia contributors. The authors of each article are listed in its history
+(the "היסטוריית גרסאות" tab of the article page).
+
+    wiki_bicycle.txt     https://he.wikipedia.org/wiki/אופניים
+    wiki_cat.txt         https://he.wikipedia.org/wiki/חתול
+    wiki_chocolate.txt   https://he.wikipedia.org/wiki/שוקולד
+    wiki_computer.txt    https://he.wikipedia.org/wiki/מחשב
+    wiki_rain.txt        https://he.wikipedia.org/wiki/גשם
+
+The golden packages of these texts (golden/<mode>/wiki_*.hz) decompress to the same texts
+and are under the same licence.

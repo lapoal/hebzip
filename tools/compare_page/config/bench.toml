@@ -1,0 +1,346 @@
+# hebzip public measurement - every tool, every text set, one command:  python -m atar.bench run
+# (run from tools/compare_page; see bench/README.txt). A typo in a field name stops the bench at start-up.
+# The rows are the page's [[tools]] rows (same drawers, same options) plus what a published table needs:
+#   header_bytes = the fixed bytes every package of the tool carries whatever the text (subtracted in the
+#                  "without headers" tables); languages = the text sets the row runs on;
+#   prior        = what the tool brings with it before it sees the text (our rows: the size of the mode's
+#                  tables is added by the bench, asked from hebzip itself); needs = an external program
+#                  given on the command line (paq8px is GPL and not shipped: its rows run only with --paq8px);
+#   hebzip_mode / mode_id = our rows only: the mode, and the id its packages must carry (another id =
+#                  the tool's fallback wrote that package; the result says "ok (fallback)").
+# Words: {python} = the Python running the bench, {repo} = the repository root, {work} = the pair's scratch
+# folder, {paq8px} = the scratch copy of the exe given with --paq8px.
+
+[bench]
+manifest = "bench/manifest.json"
+results = "bench/results"
+work = "material/bench"          # scratch (dataset texts, packages, paq8px's copy) - deleted at the end
+seen_share = 0.05                # a text with >= 5% of its 8-word runs in a training article = seen in training
+languages = ["he", "en"]
+
+# Our tool stays loaded for the service rows: one service per language, each stopped after its last row
+# (never in memory together with paq8px).
+[services.hebzip_he]
+version = "hebzip (loaded: python -m hebzip serve)"
+cwd = "{repo}"
+command = ["{python}", "-m", "hebzip", "serve", "--modes", "fast,max,max_plus"]
+ready_timeout_s = 900
+
+[services.hebzip_en]
+version = "hebzip (loaded: python -m hebzip serve)"
+cwd = "{repo}"
+command = ["{python}", "-m", "hebzip", "serve", "--modes", "en_fast,en_max"]
+ready_timeout_s = 900
+
+# ------------------------------------------------------------------ the well-known tools
+[[rows]]
+id = "gzip"
+label = "gzip -9"
+kind = "gzip"
+ours = false
+timeout_s = 600
+options = { level = 9 }
+header_bytes = 18                # RFC 1952: 10-byte header + 8-byte trailer (CRC32, size)
+languages = ["he", "en"]
+prior = "none"
+
+[[rows]]
+id = "bz2"
+label = "bzip2 -9"
+kind = "bz2"
+ours = false
+timeout_s = 600
+options = { level = 9 }
+header_bytes = 27                # "BZh9" 4 + block magic/CRC/flag/origPtr ~13 + end magic/CRC 10 (bit padding not counted)
+languages = ["he", "en"]
+prior = "none"
+
+[[rows]]
+id = "xz"
+label = "xz -9e"
+kind = "xz"
+ours = false
+timeout_s = 600
+options = { preset = 9, extreme = true }
+header_bytes = 57                # .xz container minus the raw LZMA2 stream, measured: 57-59 B (block padding 0-2)
+languages = ["he", "en"]
+prior = "none"
+
+[[rows]]
+id = "zstd"
+label = "zstd -19"
+kind = "zstd"
+ours = false
+timeout_s = 600
+options = { level = 19 }
+header_bytes = 10                # magic 4 + frame header 3 (with the content size of a 256 B - 64 KB text) + block header 3
+languages = ["he", "en"]
+prior = "none (no dictionary used)"
+
+[[rows]]
+id = "brotli"
+label = "brotli -q 11"
+kind = "command"
+ours = false
+timeout_s = 600
+header_bytes = 0                 # a raw brotli stream: no container
+languages = ["he", "en"]
+prior = "built-in static dictionary, 122,784 bytes (RFC 7932 Appendix A; mostly English and other web text)"
+[rows.options]
+version = "Node.js zlib brotli, quality 11 (time includes starting Node)"
+cwd = "{work}"
+compress = ["node", "{repo}/tools/compare_page/bench/brotli.js", "c", "{in}", "{out}", "11"]
+decompress = ["node", "{repo}/tools/compare_page/bench/brotli.js", "d", "{in}", "{out}"]
+memory_mb = 0
+memory_words = ["heap out of memory"]
+
+[[rows]]
+# PPMd7 (variant H, as in 7-Zip) - the verified variant the comparison page uses (see atar.toml)
+id = "ppmd"
+label = "PPMd (H, order 8)"
+kind = "ppmd7"
+ours = false
+timeout_s = 900
+options = { order = 8, memory_mb = 64 }
+header_bytes = 4                 # the original length (the PPMd7 decoder needs it)
+languages = ["he", "en"]
+prior = "none"
+
+# ------------------------------------------------------------------ ours, loaded (the page's way)
+[[rows]]
+id = "fast"
+label = "hebzip fast (loaded)"
+kind = "service"
+ours = true
+timeout_s = 3600
+header_bytes = 2                 # mode id + table-signature byte (hebzip/domain/header.py)
+languages = ["he"]
+prior = "Hebrew Wikipedia sample + fastText Hebrew word list"
+hebzip_mode = "fast"
+mode_id = 1
+[rows.options]
+version = "hebzip"
+service = "hebzip_he"
+mode = "fast"
+cwd = "{repo}"
+compress = ["{python}", "-m", "hebzip", "compress", "--mode", "fast", "--force", "{in}", "{out}"]
+decompress = ["{python}", "-m", "hebzip", "decompress", "--force", "{in}", "{out}"]
+memory_mb = 0
+memory_words = ["MemoryError"]
+
+[[rows]]
+id = "max"
+label = "hebzip max (loaded)"
+kind = "service"
+ours = true
+timeout_s = 3600
+header_bytes = 2
+languages = ["he"]
+prior = "Hebrew Wikipedia sample + fastText Hebrew word list"
+hebzip_mode = "max"
+mode_id = 2
+[rows.options]
+version = "hebzip"
+service = "hebzip_he"
+mode = "max"
+cwd = "{repo}"
+compress = ["{python}", "-m", "hebzip", "compress", "--mode", "max", "--force", "{in}", "{out}"]
+decompress = ["{python}", "-m", "hebzip", "decompress", "--force", "{in}", "{out}"]
+memory_mb = 0
+memory_words = ["MemoryError"]
+
+[[rows]]
+id = "max_plus"
+label = "hebzip max_plus (loaded)"
+kind = "service"
+ours = true
+timeout_s = 3600
+header_bytes = 2
+languages = ["he"]
+prior = "Hebrew Wikipedia sample + fastText Hebrew word list and vectors"
+hebzip_mode = "max_plus"
+mode_id = 8
+[rows.options]
+version = "hebzip"
+service = "hebzip_he"
+mode = "max_plus"
+cwd = "{repo}"
+compress = ["{python}", "-m", "hebzip", "compress", "--mode", "max_plus", "--force", "{in}", "{out}"]
+decompress = ["{python}", "-m", "hebzip", "decompress", "--force", "{in}", "{out}"]
+memory_mb = 0
+memory_words = ["MemoryError"]
+
+[[rows]]
+id = "en_fast"
+label = "hebzip en_fast (loaded)"
+kind = "service"
+ours = true
+timeout_s = 3600
+header_bytes = 2
+languages = ["en"]
+prior = "English Wikipedia sample (dump 2023-11-01)"
+hebzip_mode = "en_fast"
+mode_id = 6
+[rows.options]
+version = "hebzip"
+service = "hebzip_en"
+mode = "en_fast"
+cwd = "{repo}"
+compress = ["{python}", "-m", "hebzip", "compress", "--mode", "en_fast", "--force", "{in}", "{out}"]
+decompress = ["{python}", "-m", "hebzip", "decompress", "--force", "{in}", "{out}"]
+memory_mb = 0
+memory_words = ["MemoryError"]
+
+[[rows]]
+id = "en_max"
+label = "hebzip en_max (loaded)"
+kind = "service"
+ours = true
+timeout_s = 3600
+header_bytes = 2
+languages = ["en"]
+prior = "English Wikipedia sample (dump 2023-11-01)"
+hebzip_mode = "en_max"
+mode_id = 7
+[rows.options]
+version = "hebzip"
+service = "hebzip_en"
+mode = "en_max"
+cwd = "{repo}"
+compress = ["{python}", "-m", "hebzip", "compress", "--mode", "en_max", "--force", "{in}", "{out}"]
+decompress = ["{python}", "-m", "hebzip", "decompress", "--force", "{in}", "{out}"]
+memory_mb = 0
+memory_words = ["MemoryError"]
+
+# ------------------------------------------------------------------ ours, a new process per call (cold CLI)
+[[rows]]
+id = "fast_cli"
+label = "hebzip fast (cold CLI)"
+kind = "command"
+ours = true
+timeout_s = 3600
+header_bytes = 2
+languages = ["he"]
+prior = "as fast"
+hebzip_mode = "fast"
+mode_id = 1
+[rows.options]
+version = "hebzip"
+cwd = "{repo}"
+compress = ["{python}", "-m", "hebzip", "compress", "--mode", "fast", "--force", "{in}", "{out}"]
+decompress = ["{python}", "-m", "hebzip", "decompress", "--force", "{in}", "{out}"]
+memory_mb = 0
+memory_words = ["MemoryError"]
+
+[[rows]]
+id = "max_cli"
+label = "hebzip max (cold CLI)"
+kind = "command"
+ours = true
+timeout_s = 3600
+header_bytes = 2
+languages = ["he"]
+prior = "as max"
+hebzip_mode = "max"
+mode_id = 2
+[rows.options]
+version = "hebzip"
+cwd = "{repo}"
+compress = ["{python}", "-m", "hebzip", "compress", "--mode", "max", "--force", "{in}", "{out}"]
+decompress = ["{python}", "-m", "hebzip", "decompress", "--force", "{in}", "{out}"]
+memory_mb = 0
+memory_words = ["MemoryError"]
+
+[[rows]]
+id = "max_plus_cli"
+label = "hebzip max_plus (cold CLI)"
+kind = "command"
+ours = true
+timeout_s = 3600
+header_bytes = 2
+languages = ["he"]
+prior = "as max_plus"
+hebzip_mode = "max_plus"
+mode_id = 8
+[rows.options]
+version = "hebzip"
+cwd = "{repo}"
+compress = ["{python}", "-m", "hebzip", "compress", "--mode", "max_plus", "--force", "{in}", "{out}"]
+decompress = ["{python}", "-m", "hebzip", "decompress", "--force", "{in}", "{out}"]
+memory_mb = 0
+memory_words = ["MemoryError"]
+
+[[rows]]
+id = "en_fast_cli"
+label = "hebzip en_fast (cold CLI)"
+kind = "command"
+ours = true
+timeout_s = 3600
+header_bytes = 2
+languages = ["en"]
+prior = "as en_fast"
+hebzip_mode = "en_fast"
+mode_id = 6
+[rows.options]
+version = "hebzip"
+cwd = "{repo}"
+compress = ["{python}", "-m", "hebzip", "compress", "--mode", "en_fast", "--force", "{in}", "{out}"]
+decompress = ["{python}", "-m", "hebzip", "decompress", "--force", "{in}", "{out}"]
+memory_mb = 0
+memory_words = ["MemoryError"]
+
+[[rows]]
+id = "en_max_cli"
+label = "hebzip en_max (cold CLI)"
+kind = "command"
+ours = true
+timeout_s = 3600
+header_bytes = 2
+languages = ["en"]
+prior = "as en_max"
+hebzip_mode = "en_max"
+mode_id = 7
+[rows.options]
+version = "hebzip"
+cwd = "{repo}"
+compress = ["{python}", "-m", "hebzip", "compress", "--mode", "en_max", "--force", "{in}", "{out}"]
+decompress = ["{python}", "-m", "hebzip", "decompress", "--force", "{in}", "{out}"]
+memory_mb = 0
+memory_words = ["MemoryError"]
+
+# ------------------------------------------------------------------ paq8px (optional: --paq8px PATH)
+[[rows]]
+id = "paq8px_8L"
+label = "paq8px v217 -8L"
+kind = "command"
+ours = false
+timeout_s = 1800
+header_bytes = 9                 # paq8px archive header with the LSTM flag (paq8px.cpp)
+languages = ["he", "en"]
+prior = "none (its models, LSTM included, start empty and learn from the text)"
+needs = "paq8px"
+[rows.options]
+version = "paq8px v217, -8L"
+cwd = "{work}"
+compress = ["{paq8px}", "-8L", "{in}", "{out}"]
+decompress = ["{paq8px}", "-d", "{in}", "{out}"]
+memory_mb = 2300                 # -8L reserves ~2.2 GB; the row says "not enough memory" instead of starting
+memory_words = ["memory", "alloc"]
+
+[[rows]]
+id = "paq8px_8LT"
+label = "paq8px v217 -8LT"
+kind = "command"
+ours = false
+timeout_s = 1800
+header_bytes = 9
+languages = ["en"]
+prior = "English dictionary + word embeddings for its text transform (english.dic / .exp / .emb - sizes in the summary)"
+needs = "paq8px"
+[rows.options]
+version = "paq8px v217, -8LT"
+cwd = "{work}"
+compress = ["{paq8px}", "-8LT", "{in}", "{out}"]
+decompress = ["{paq8px}", "-d", "{in}", "{out}"]
+memory_mb = 2300
+memory_words = ["memory", "alloc"]

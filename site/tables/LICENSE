@@ -1,0 +1,22 @@
+Licence of the tables (data) - not the licence of the code
+==========================================================
+
+The statistical tables and word lists of hebzip - the files in this folder, the same files inside the
+website folder (site/tables/) and the tables archive published as a release download - are licensed under
+
+    Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+    https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+They are adaptations of Hebrew Wikipedia, English Wikipedia and the fastText Hebrew word vectors (see
+CREDITS.md for the sources, the attribution and the list of articles). They were MODIFIED: the source
+texts and vectors were converted into word lists, word / letter / template counts, word classes and
+neighbour lists; no source text is stored in them.
+
+You may share and adapt them, also commercially, if you give the attribution in CREDITS.md, say that
+you changed them (if you did), and share your adaptations under the same licence.
+
+Exception: tables/latin_toy/ was built from a toy text written for this project
+(langpacks/latin_toy/) and is under the MIT licence of the code (../LICENSE).
+
+The code that reads these tables (hebzip/) is under the MIT licence (../LICENSE). Reading a table as
+data does not make the code an adaptation of it; the two licences stay separate.

@@ -1,0 +1,49 @@
+# --- never commit: private texts and anything made from them (a package decompresses to its text)
+user_*
+**/user_*
+golden/texts/user_*
+golden/*/user_*
+
+# --- tables: release downloads (tables/README.md), never in the repository - only their licence, credits,
+#     title lists and the project-written toy pack are. Modes fast / en_fast also ship them in site/tables/.
+tables/*
+!tables/README.md
+!tables/LICENSE
+!tables/CREDITS.md
+!tables/wiki_titles_he.txt
+!tables/wiki_titles_en.txt
+!tables/latin_toy/
+
+# --- raw corpora and word vectors: tables are built from them, they are never part of the repository
+corpus/
+corpora/
+*.jsonl
+*.jsonl.*
+*.vec
+*.vec.gz
+*.bz2
+*_vectors_*.npy
+he_vectors*.npy
+
+# --- derived copies and machine files (regenerated: python -m hebzip.ops.convert_tables)
+.cache/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# --- scratch, logs and run results
+tests/_work/
+tools/compare_page/tests/_work/
+tools/compare_page/material/
+tools/compare_page/logs/
+logs/
+# (root only: tools/compare_page/bench/results/ IS published)
+/results/
+scratch/
+_scratch/
+tmp/
+*.log

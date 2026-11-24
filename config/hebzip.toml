@@ -1,0 +1,1261 @@
+# hebzip.toml - the one settings file of the tool. Unknown field anywhere = refuses to start.
+# Every number of the heart is a row here; a drawer is chosen by a word ("kind" / the drawer rows).
+# Relative paths are measured from the project folder (the folder that holds hebzip/ and tables/).
+# Several languages live in one file: every model mode names its language pack (row "language").
+# A table with a [tables.<name>.recipe] can be rebuilt from a corpus by `python -m hebzip.ops.build_langpack`;
+# a table without one was given (copied in) and is only read.
+# squash_knots (every template mode) = samples of the logistic function, made by `python -m hebzip.ops.knots`
+# (formula and rounding: hebzip/ops/knots.py; tests/ops/test_knots.py checks every row against it).
+
+[hebzip]
+format_version = 1
+default_mode = "fast"
+fallback = ["generic"]
+fallback_policy = "smaller"      # "smaller" | "on_error"
+verify_roundtrip = true
+integrity = "none"               # "none" | "crc8" | "crc16"
+engine = "numba"                 # "python" | "numba" - the same kernels, compiled or not; same bytes
+holes = "null"
+signature_cache = ".cache/table_sigs.json"
+material_dir = "golden"          # the ONE folder that may hold text (the pinned test material);
+                                 # everywhere else only numbers, names and hashes - tests/gates/test_canary.py checks
+table_store = "mmap"             # "eager" | "mmap" | "null" - where the tables come from:
+                                 # eager = the pinned files below, read whole; mmap = their derived copy
+                                 # (raw narrowed .npy, memory-mapped; make it first with
+                                 # `python -m hebzip.ops.convert_tables`); null = no tables. Same bytes.
+table_store_dir = "tables/mmap"  # the derived copy + manifest.json (machine, not material)
+narrow_bits = [8, 16, 32, 64]    # integer widths the derived copy may use; a value fitting none = refused
+max_input_bytes = 50000000
+max_output_bytes = 200000000
+phantom_bits_max = 1024          # damaged-package bound: zero bits a decoder may read past the body
+log_level = "INFO"
+
+# ---------------------------------------------------------------- tables (pinned by sha256)
+[tables.he_words]
+path = "tables/he_words.txt"
+sha256 = "9d326917ccdcce714a99af47d2d7e963358b41c1c4ec1722f5c4bbc23151f63a"
+bytes = 18206852
+
+[tables.bigram_mc1]
+path = "tables/bigram_mc1.npz"
+sha256 = "1f380ab97e33a5381bf29f5b860cff76cee52e69a25cec18e606f342b854f0d8"
+bytes = 5462790
+
+[tables.bigram_mc1.recipe]                          # word counts + the next word after each word
+kind = "word_pairs"
+held_every = 40
+
+[tables.template_m128]
+path = "tables/template_m128.npz"
+sha256 = "11fe8426149845c19f8761c3c7379b6c772397d45c6940f90fd169c605d18b9e"
+bytes = 1645384
+
+[tables.template_m128.recipe]                       # static context counts of the template bytes
+kind = "template_prior"
+held_every = 40                  # every 40th corpus article is held out (never counted)
+min_count = 128                  # a context key enters the table when seen this often
+count_levels = [2, 4, 16, 64]    # confidence level of an entry = how many of these its count reaches
+
+[tables.template_m128_weights]
+path = "tables/template_m128_weights.json"
+sha256 = "c329bda5fe71ac44790654e5228d10b52d7a70d9677dc4a8a00890939a818ad7"
+bytes = 1679
+
+[tables.template_m128_weights.recipe]               # fitted with the real model (domain/template_fit.py)
+kind = "template_weights"
+held_every = 40                  # fitted on every second held-out article ...
+fit_cut = 400                    # ... cut to its first 400 template bytes (short messages)
+fit_passes = 1
+start_weight = 16384             # every weight starts at 1/4 (16.16 fixed point)
+
+[tables.corpus_gap_starts]                          # mode max: corpus first words per gap class
+path = "tables/corpus_gap_starts.npz"
+sha256 = "26fb23828715ea846c3f0e795c366af7280f5e5d1a71da9ecc55efa6a06300d5"
+bytes = 80088
+
+[tables.corpus_gap_starts.recipe]
+kind = "gap_starts"
+held_every = 40
+keep_top = 4000                  # the most frequent first words kept per gap class
+
+[tables.prefix_classes]                             # mode max: proclitic class of every word id
+path = "tables/prefix_classes.npy"
+sha256 = "d7c8e4932793822fafee2e5abd0b11831221cd9fb894c7d46edc17b795147b70"
+bytes = 1175800
+
+[tables.prefix_classes.recipe]
+kind = "prefix_classes"          # class 0 = no proclitic, 1 = short word, then one class per [languages].prefixes
+short_len = 2                    # words this short are their own class
+double_min_len = 4               # a double proclitic needs a word at least this long ...
+double_first = "ו"               # ... starting with one of these, then another proclitic letter
+
+[tables.prefix_prior]                               # mode max: class transitions [prev class][gap group][class]
+path = "tables/prefix_prior.npy"
+sha256 = "fb860158b87309d8a8b41cd1263f6263bf15a853d17059795c50a1925a8a6355"
+bytes = 6656
+
+[tables.prefix_prior.recipe]
+kind = "prefix_prior"
+held_every = 40
+
+[tables.trie_he]                                    # mode max: the dictionary in alphabetical order
+path = "tables/trie_he.npz"
+sha256 = "2a73bbc634aa7cec1998d2f5e77a2d1fecdde8e76fc432ba7d11cb774c689f1f"
+bytes = 37622006
+
+[tables.trie_he.recipe]
+kind = "letter_trie"
+columns = 24                     # letters kept per word in the table (deeper ones: found by search)
+
+[tables.letters_v15]                                # mode max: corpus letter chains (cross / within)
+path = "tables/letters_v15.npz"
+sha256 = "67826ee95b35c1995ca09f8ef203bec39ab706602007fa79f9845ec727e9db78"
+bytes = 18520619
+
+[tables.letters_v15.recipe]
+kind = "letter_chains"
+held_every = 40
+
+[tables.letter_start_sets]                          # mode max: pretrained start weights of the letter mixer
+path = "tables/letter_start_sets.json"
+sha256 = "77018324df5085d8bd4ef828e80342971ffa1d5d946a60a8f806ffd645fce05b"
+bytes = 2806
+
+# ---------------------------------------------------------------- language pack
+[languages.he]
+letters = [[0x05D0, 0x05EA]]                        # alef .. tav
+marks = [[0x0591, 0x05BD], [0x05BF, 0x05BF], [0x05C1, 0x05C2], [0x05C4, 0x05C5], [0x05C7, 0x05C7]]
+word_list = "he_words"                              # word id = line number
+slot_plain = 0xFF                                   # template codes: never valid UTF-8
+slot_marked = 0xFE
+mark_separator = 0xFC
+marked_end = 0xFD
+sentence_end = [".", "!", "?", "\n", "׃"]           # gap class "sentence start" (mode max)
+prefixes = "והבכלמש"                                # the proclitic letters: read by the recipe of prefix_classes
+gap_space = " \t\r\u00A0"                         # stripped from the end of a gap before its last character is read
+gap_marks = [",;", ":", "\"'׳״“”„‘’«»", "()[]{}", "-–—־"]   # gap classes 2..6: comma-like, colon, quotes, brackets, dashes
+
+# ---------------------------------------------------------------- mode fast
+[modes.fast]
+id = 1
+kind = "model"
+language = "he"                  # a [languages.*] pack
+dictionary = "word_list"         # "word_list" | "null"
+tokenizer = "overlay"            # "overlay" | "literal"
+word_model = "mixture"           # "mixture" | "null"
+word_coder = "direct"            # "direct" | "spelled"
+table_scale_bits = 60            # word coding table: weights sum to about 2**60
+channels = ["corpus_pairs", "text_pairs", "text_counts"]   # mixer channel order = float summation order
+
+[modes.fast.gap]
+kind = "none"                    # "punctuation" | "none" (fast reads no gap)
+
+[modes.fast.template]
+kind = "cm"                      # "cm" | "flat"
+prob_bits = 12                   # template-bit probabilities: 12-bit integers (1..4095 of 4096)
+fix_bits = 16                    # mixer weights 16.16, adaptive probabilities 16-bit
+table = "template_m128"
+weights = "template_m128_weights"
+orders = [0, 1, 2, 3, 4, 6, 8]
+adaptive = [1, 2, 3, 4, 6]
+word_context = true
+word_distance_cap = 3
+word_seed_order = 15
+static_scale = 16
+conf_level = 2
+learning_rate = 12
+count_limit = 60
+adaptive_start = 32768
+adaptive_min = 32
+adaptive_max = 65503
+adaptive_recip_offset2 = 3       # adaptive rate = 1 / (count + 3/2)
+bias_input = 256
+weight_max = 1099511627776       # 2**40: both engines stop alike beyond it
+hash_mul = 0x2F0B3A49
+c0_mul = 0x9E3779B1
+seed_mul = 0x9E3779B1
+seed_add = 0x7F4A7C15
+finish_mul = 0x85EBCA6B
+finish_shift1 = 16               # the hash's two xor-shifts (murmur-style finish)
+finish_shift2 = 13
+squash_knots = [1, 2, 4, 6, 10, 17, 27, 45, 74, 120, 194, 311, 488, 747, 1102, 1546, 2048, 2550, 2994,
+                3349, 3608, 3785, 3902, 3976, 4022, 4051, 4069, 4079, 4086, 4090, 4092, 4094, 4095]
+
+[modes.fast.base]
+kind = "unigram_zipf"            # "unigram_zipf" | "uniform"
+table = "bigram_mc1"
+zeta = 0.3333333333333333
+u_scale_bits = 40
+zipf_weight_bits = 40
+zipf_offset = 10
+
+[modes.fast.mixer]
+kind = "trust"                   # "trust" | "static"
+eta = 0.06623160779297654
+alpha = 0.0066231607792976545
+
+[modes.fast.predictors.corpus_pairs]
+kind = "corpus_pairs"            # every predictor: its kind | "null"
+table = "bigram_mc1"
+discount = 0.8522727272727273
+trust0 = 1.0
+
+[modes.fast.predictors.text_pairs]
+kind = "text_pairs"
+confidence_k = 1.3815625984855935
+trust0 = 0.6749999999999999
+
+[modes.fast.predictors.text_counts]
+kind = "text_counts"
+confidence_k = 96.73971047973636
+trust0 = 1.1540195341848232
+
+# ---------------------------------------------------------------- mode max
+# The word model with 8 channels + fast's template model + every word SPELLED
+# letter by letter over the alphabetical tree, mixed with letter models.
+[modes.max]
+id = 2
+kind = "model"
+language = "he"
+dictionary = "word_list"
+tokenizer = "overlay"
+word_model = "mixture"
+word_coder = "spelled"           # "spelled" | "direct"
+table_scale_bits = 60
+channels = ["corpus_pairs", "text_pairs", "text_counts", "text_triples", "text_gap_starts",
+            "corpus_gap_starts", "prefix_class", "recency"]
+
+[modes.max.gap]
+kind = "punctuation"             # "punctuation" | "none"
+groups = [0, 1, 2, 2, 2, 2, 2, 2]   # per gap class (mid, sentence, the 5 gap_marks, other): mid / start / after a mark
+
+[modes.max.template]
+kind = "cm"
+prob_bits = 12
+fix_bits = 16
+table = "template_m128"
+weights = "template_m128_weights"
+orders = [0, 1, 2, 3, 4, 6, 8]
+adaptive = [1, 2, 3, 4, 6]
+word_context = true
+word_distance_cap = 3
+word_seed_order = 15
+static_scale = 16
+conf_level = 2
+learning_rate = 12
+count_limit = 60
+adaptive_start = 32768
+adaptive_min = 32
+adaptive_max = 65503
+adaptive_recip_offset2 = 3       # adaptive rate = 1 / (count + 3/2)
+bias_input = 256
+weight_max = 1099511627776       # 2**40: both engines stop alike beyond it
+hash_mul = 0x2F0B3A49
+c0_mul = 0x9E3779B1
+seed_mul = 0x9E3779B1
+seed_add = 0x7F4A7C15
+finish_mul = 0x85EBCA6B
+finish_shift1 = 16               # the hash's two xor-shifts (murmur-style finish)
+finish_shift2 = 13
+squash_knots = [1, 2, 4, 6, 10, 17, 27, 45, 74, 120, 194, 311, 488, 747, 1102, 1546, 2048, 2550, 2994,
+                3349, 3608, 3785, 3902, 3976, 4022, 4051, 4069, 4079, 4086, 4090, 4092, 4094, 4095]
+
+[modes.max.base]
+kind = "unigram_zipf"
+table = "bigram_mc1"
+zeta = 0.3333333333333333
+u_scale_bits = 40
+zipf_weight_bits = 40
+zipf_offset = 10
+
+[modes.max.mixer]
+kind = "trust"
+eta = 0.05519300649414712
+alpha = 0.0030662781385637295
+
+[modes.max.predictors.corpus_pairs]
+kind = "corpus_pairs"
+table = "bigram_mc1"
+discount = 0.8522727272727273
+trust0 = 1.0
+
+[modes.max.predictors.text_pairs]
+kind = "text_pairs"
+confidence_k = 1.3815625984855935
+trust0 = 0.6749999999999999
+
+[modes.max.predictors.text_counts]
+kind = "text_counts"
+confidence_k = 96.73971047973636
+trust0 = 1.1540195341848232
+
+[modes.max.predictors.text_triples]
+kind = "text_triples"
+confidence_k = 0.08333333333333333
+trust0 = 0.414
+
+[modes.max.predictors.text_gap_starts]
+kind = "text_gap_starts"
+confidence_k = 1.7066666666666663
+trust0 = 0.44999999999999996
+groups = [1, 2]                  # speaks at sentence starts and after marks
+
+[modes.max.predictors.corpus_gap_starts]
+kind = "corpus_gap_starts"
+table = "corpus_gap_starts"
+discount = 0.046875
+trust0 = 1.05
+groups = [1, 2]
+
+[modes.max.predictors.prefix_class]
+kind = "prefix_class"
+table = "prefix_classes"
+prior_table = "prefix_prior"
+prior_add = 0.5                  # added to every prior count before its rows are normalised
+prior_k = 1.25                   # weight of the prior against the text's own class counts
+confidence_k = 729.0
+trust0 = 0.1
+
+[modes.max.predictors.recency]
+kind = "recency"
+window = 30
+confidence_k = 8.0
+trust0 = 0.1
+
+[modes.max.speller]
+trie = "trie_he"
+q_bits = 30                      # letter coding table: freq = int(p * 2**q_bits) + 1
+inputs = ["cross_word", "within_word", "text_letters"]   # letter inputs after input 0 (the word model)
+
+[modes.max.letter_chains.cross]
+context = "cross"                # "cross" | "within"
+table = "letters_v15"
+max_order = 6
+beta = 3.0727272727272728
+add_count = 1.0
+symbol_bits = 5
+
+[modes.max.letter_chains.within]
+context = "within"
+table = "letters_v15"
+max_order = 4
+beta = 265.2586360566414
+add_count = 1.0
+symbol_bits = 5
+
+[modes.max.letters.cross_word]
+kind = "static_chain"            # every letter input: "static_chain" | "text_letters" | "null"
+chain = "cross"
+
+[modes.max.letters.within_word]
+kind = "static_chain"
+chain = "within"
+
+[modes.max.letters.text_letters]
+kind = "text_letters"
+base_chain = "cross"
+max_order = 6
+gamma = 4.0
+
+[modes.max.letter_mixer]
+kind = "geometric"               # "geometric" | "word_only"
+lr = 0.0019560858721697875
+start_weights = [0.65, 0.23636363636363636, 0.0001953125, 0.13]   # word model, then the inputs in order
+depth_max = 4
+conf_buckets = [0.3, 0.6, 0.9, 0.99]
+start_sets = "letter_start_sets"
+
+# ---------------------------------------------------------------- generic fallback
+[modes.generic]
+id = 3
+kind = "generic"
+generic_codec = "best_of"        # "best_of" | "null"
+codecs = ["raw", "deflate:9", "bzip2:9", "xz:9:extreme", "zstd:22",
+          "ppmd:H:4", "ppmd:H:6", "ppmd:H:8", "ppmd:H:12", "ppmd:H:16",
+          "ppmd:I:4", "ppmd:I:6", "ppmd:I:8", "ppmd:I:12", "ppmd:I:16"]   # order = codec byte
+ppmd_memory_mb = 16
+
+# ================================================================ max_plus: max + word classes + a topic channel
+# Two more word channels from the word's CLASS (k-means classes of fastText vectors; the class of the word 1 / 2
+# back predicts the next word, counted on Wikipedia), trust vectors selected per situation, and a TOPIC channel
+# (the fastText neighbours of the text's recent content words). Numbers were tuned on held-out Wikipedia
+# articles, never on the test texts. Every part is a drawer with its plate.
+[tables.word_classes]                               # a word class 0..511 per word id (fastText k-means)
+path = "tables/classes/word_classes_512.npy"
+sha256 = "fd0065b60741f05647ecd4552009c21485bfa53c8f32459de0da40afb25fac9f"
+bytes = 9405504
+
+[tables.word_classes.recipe]                        # needs --vectors <fastText vectors, float16 .npy>
+kind = "word_classes"
+classes = 512
+fit_words = 200000               # the centroids are fitted on the most frequent words only
+iterations = 25
+seed = 12345
+
+[tables.class_pairs_wiki]                           # class of the word 1 / 2 back -> next word (Wikipedia)
+path = "tables/classes/class_pairs_wiki.npz"
+sha256 = "bd9e616a8f6bb98233682c917e75839e2276cf878578b5b5b6273379942732ac"
+bytes = 11707006
+
+[tables.class_pairs_wiki.recipe]
+kind = "class_pairs"
+held_every = 40
+min_count = 2                    # a (class, word) pair seen once stays in the back-off
+
+# Pretrained trust vectors per situation (keys 'gap class,found*2+late'), fitted on held-out Wikipedia.
+# Given (no recipe), like letter_start_sets; a new language
+# uses the recipe kind = "trust_start_sets" (every situation starts from trust0).
+[tables.trust_sets_wiki]
+path = "tables/plus/trust_sets_wiki.json"
+sha256 = "e63cd1ec64268895225a99392e019a2878000d05e431c136e4a2f482d60a306b"
+bytes = 6838
+
+# text_topic (part of max_plus): the next word by the fastText neighbours of the text's recent content words.
+# Neighbour lists are integers made once by ops/topics.py (build_langpack --tables topic_neighbours --vectors
+# <vectors .npy>); nothing is computed in floats from the vectors while coding.
+[tables.topic_neighbours]
+path = "tables/topic/neighbours.npz"
+sha256 = "6a12a814a582c1af86afaf6449311c31016cea3d5ac7b97e554117ad54247c4e"
+bytes = 56735576
+
+[tables.topic_neighbours.recipe]
+kind = "topic_neighbours"
+neighbours = 32
+skip_top = 300
+candidates = 250000
+sim_floor = 0.35
+levels = 255
+
+[tables.topic_trust_sets]                        # trust_sets_wiki + the topic channel's start trust
+path = "tables/topic/trust_sets.json"
+sha256 = "5642589f56417e105f9ef530d96b468632eecca4f0075e910711bce02112b3c5"
+bytes = 7024
+
+[tables.topic_trust_sets.recipe]
+kind = "append_sets"
+source = "trust_sets_wiki"
+append = [0.03]
+
+[modes.max_plus]
+id = 8
+kind = "model"
+language = "he"
+dictionary = "word_list"
+tokenizer = "overlay"
+word_model = "mixture"
+word_coder = "spelled"
+table_scale_bits = 60
+channels = ["corpus_pairs", "text_pairs", "text_counts", "text_triples", "text_gap_starts",
+            "corpus_gap_starts", "prefix_class", "recency", "class_pairs", "class_skip", "topic"]
+
+[modes.max_plus.gap]
+kind = "punctuation"
+groups = [0, 1, 2, 2, 2, 2, 2, 2]
+
+[modes.max_plus.template]
+kind = "cm"
+prob_bits = 12
+fix_bits = 16
+table = "template_m128"
+weights = "template_m128_weights"
+orders = [0, 1, 2, 3, 4, 6, 8]
+adaptive = [1, 2, 3, 4, 6]
+word_context = true
+word_distance_cap = 3
+word_seed_order = 15
+static_scale = 16
+conf_level = 2
+learning_rate = 12
+count_limit = 60
+adaptive_start = 32768
+adaptive_min = 32
+adaptive_max = 65503
+adaptive_recip_offset2 = 3
+bias_input = 256
+weight_max = 1099511627776
+hash_mul = 0x2F0B3A49
+c0_mul = 0x9E3779B1
+seed_mul = 0x9E3779B1
+seed_add = 0x7F4A7C15
+finish_mul = 0x85EBCA6B
+finish_shift1 = 16
+finish_shift2 = 13
+squash_knots = [1, 2, 4, 6, 10, 17, 27, 45, 74, 120, 194, 311, 488, 747, 1102, 1546, 2048, 2550, 2994,
+                3349, 3608, 3785, 3902, 3976, 4022, 4051, 4069, 4079, 4086, 4090, 4092, 4094, 4095]
+
+[modes.max_plus.base]
+kind = "unigram_zipf"
+table = "bigram_mc1"
+zeta = 0.3333333333333333
+u_scale_bits = 40
+zipf_weight_bits = 40
+zipf_offset = 10
+
+[modes.max_plus.mixer]
+kind = "trust_selected"
+eta = 0.05519300649414712
+alpha = 0.0030662781385637295
+trust_sets = "topic_trust_sets"
+select_channel = "corpus_pairs"
+position_split = 10
+
+[modes.max_plus.predictors.corpus_pairs]
+kind = "corpus_pairs"
+table = "bigram_mc1"
+discount = 0.8522727272727273
+trust0 = 1.0
+
+[modes.max_plus.predictors.text_pairs]
+kind = "text_pairs"
+confidence_k = 1.3815625984855935
+trust0 = 0.6749999999999999
+
+[modes.max_plus.predictors.text_counts]
+kind = "text_counts"
+confidence_k = 96.73971047973636
+trust0 = 1.1540195341848232
+
+[modes.max_plus.predictors.text_triples]
+kind = "text_triples"
+confidence_k = 0.08333333333333333
+trust0 = 0.414
+
+[modes.max_plus.predictors.text_gap_starts]
+kind = "text_gap_starts"
+confidence_k = 1.7066666666666663
+trust0 = 0.44999999999999996
+groups = [1, 2]
+
+[modes.max_plus.predictors.corpus_gap_starts]
+kind = "corpus_gap_starts"
+table = "corpus_gap_starts"
+discount = 0.046875
+trust0 = 1.05
+groups = [1, 2]
+
+[modes.max_plus.predictors.prefix_class]
+kind = "prefix_class"
+table = "prefix_classes"
+prior_table = "prefix_prior"
+prior_add = 0.5
+prior_k = 1.25
+confidence_k = 729.0
+trust0 = 0.1
+
+[modes.max_plus.predictors.recency]
+kind = "recency"
+window = 30
+confidence_k = 8.0
+trust0 = 0.1
+
+[modes.max_plus.predictors.class_pairs]
+kind = "corpus_classes"
+table = "word_classes"
+prior_table = "class_pairs_wiki"
+window = 1
+discount = 0.01171875
+trust0 = 0.21428571428571427
+
+[modes.max_plus.predictors.class_skip]
+kind = "corpus_classes"
+table = "word_classes"
+prior_table = "class_pairs_wiki"
+window = 2
+discount = 0.01171875
+trust0 = 0.05
+
+[modes.max_plus.predictors.topic]
+kind = "text_topic"
+table = "topic_neighbours"
+window = 64
+confidence_k = 4.0
+trust0 = 0.3
+
+[modes.max_plus.speller]
+trie = "trie_he"
+q_bits = 30
+inputs = ["cross_word", "within_word", "text_letters"]
+
+[modes.max_plus.letter_chains.cross]
+context = "cross"
+table = "letters_v15"
+max_order = 6
+beta = 3.0727272727272728
+add_count = 1.0
+symbol_bits = 5
+
+[modes.max_plus.letter_chains.within]
+context = "within"
+table = "letters_v15"
+max_order = 4
+beta = 265.2586360566414
+add_count = 1.0
+symbol_bits = 5
+
+[modes.max_plus.letters.cross_word]
+kind = "static_chain"
+chain = "cross"
+
+[modes.max_plus.letters.within_word]
+kind = "static_chain"
+chain = "within"
+
+[modes.max_plus.letters.text_letters]
+kind = "text_letters"
+base_chain = "cross"
+max_order = 6
+gamma = 4.0
+
+[modes.max_plus.letter_mixer]
+kind = "geometric"
+lr = 0.0019560858721697875
+start_weights = [0.65, 0.23636363636363636, 0.0001953125, 0.13]
+depth_max = 4
+conf_buckets = [0.3, 0.6, 0.9, 0.99]
+start_sets = "letter_start_sets"
+
+
+
+# ================================================================ a SECOND language in the same file
+# The toy Latin pack (a new language needs rows and tables, no code): rows + tables only, no code. Its tables are built
+# from langpacks/latin_toy/corpus.txt (one document per line) by
+#     python -m hebzip.ops.build_langpack --language latin_toy --corpus langpacks\latin_toy\corpus.txt
+# (the tool prints the sha256/bytes rows below). Use it with:  python -m hebzip compress --mode latin_fast ...
+# Differences from the Hebrew pack are rows: letters A-Z a-z, combining accents as marks, Latin punctuation
+# in the gap classes, fewer template orders, and the Hebrew-only drawer prefix_class switched to its plate.
+# ---------------------------------------------------------------- tables (pinned by sha256)
+[tables.toy_words]
+path = "tables/latin_toy/words.txt"
+sha256 = "d8797370a36c2ce0ed598044fec8b0c6d1738713f4b91f02229796e0c48d724c"
+bytes = 2174
+
+[tables.toy_words.recipe]
+kind = "corpus_words"
+held_every = 0                   # 0 = no line held out
+
+[tables.toy_bigram]
+path = "tables/latin_toy/bigram.npz"
+sha256 = "e9cef222e56e3cf0d0b29efc3e11f7cb56444cd017c02d27c545f5d80aaea794"
+bytes = 24938
+
+[tables.toy_bigram.recipe]
+kind = "word_pairs"
+held_every = 0
+
+[tables.toy_template]
+path = "tables/latin_toy/template.npz"
+sha256 = "74f5d87919bbd34466d1887b82c12d7a1101d8300ea6acd4170ae02c308b5cc2"
+bytes = 18556
+
+[tables.toy_template.recipe]
+kind = "template_prior"
+held_every = 4                   # every 4th corpus line is held out (for the weights below)
+min_count = 2
+count_levels = [2, 4, 16, 64]
+
+[tables.toy_template_weights]
+path = "tables/latin_toy/template_weights.json"
+sha256 = "904206bc08aa19327a1977e14d417214584c8adc5ef3fd85e0e0d7f034aac121"
+bytes = 1125
+
+[tables.toy_template_weights.recipe]
+kind = "template_weights"
+held_every = 4
+fit_cut = 400
+fit_passes = 1
+start_weight = 16384
+
+[tables.toy_gap_starts]
+path = "tables/latin_toy/gap_starts.npz"
+sha256 = "f38aa588388120a0866cca80f4c30a6f7263db57d2f9a67bba6e8715b300c577"
+bytes = 6326
+
+[tables.toy_gap_starts.recipe]
+kind = "gap_starts"
+held_every = 0
+keep_top = 4000
+
+[tables.toy_trie]
+path = "tables/latin_toy/trie.npz"
+sha256 = "2aec7c022e5491642c0ca6b30060a2577671c11c682fbbeda52747ebf42baf98"
+bytes = 12366
+
+[tables.toy_trie.recipe]
+kind = "letter_trie"
+columns = 24                     # letters kept per word in the table (deeper ones: found by search)
+
+[tables.toy_letters]
+path = "tables/latin_toy/letters.npz"
+sha256 = "958e7fbb99cffb2ddf8b4bbc34b7126760967a6f6d6b73b1b22fd29b6ac71167"
+bytes = 286430
+
+[tables.toy_letters.recipe]
+kind = "letter_chains"
+held_every = 0
+
+[tables.toy_letter_sets]
+path = "tables/latin_toy/letter_sets.json"
+sha256 = "f87030e7583a81ee2f360a7af13826756216d85291649c4f962e6b9ff8b74c6c"
+bytes = 13
+
+[tables.toy_letter_sets.recipe]
+kind = "letter_start_sets"
+
+# ---------------------------------------------------------------- language pack
+[languages.latin_toy]
+letters = [[0x41, 0x5A], [0x61, 0x7A]]              # A..Z, a..z
+marks = [[0x0300, 0x036F]]                          # combining accents (e + U+0301 = e with acute)
+word_list = "toy_words"
+slot_plain = 0xFF
+slot_marked = 0xFE
+mark_separator = 0xFC
+marked_end = 0xFD
+sentence_end = [".", "!", "?", "\n"]
+prefixes = ""                                       # no proclitic letters in this language
+gap_space = " \t\r "
+gap_marks = [",;", ":", "\"'", "()[]{}", "-"]       # gap classes 2..6
+
+# ---------------------------------------------------------------- mode latin_fast
+[modes.latin_fast]
+id = 4
+kind = "model"
+language = "latin_toy"
+dictionary = "word_list"
+tokenizer = "overlay"
+word_model = "mixture"
+word_coder = "direct"
+table_scale_bits = 60
+channels = ["corpus_pairs", "text_pairs", "text_counts"]
+
+[modes.latin_fast.gap]
+kind = "none"
+
+[modes.latin_fast.template]
+kind = "cm"
+prob_bits = 12
+fix_bits = 16
+table = "toy_template"
+weights = "toy_template_weights"
+orders = [0, 1, 2, 3, 4]
+adaptive = [1, 2, 3, 4, 6]
+word_context = true
+word_distance_cap = 3
+word_seed_order = 15
+static_scale = 16
+conf_level = 2
+learning_rate = 12
+count_limit = 60
+adaptive_start = 32768
+adaptive_min = 32
+adaptive_max = 65503
+adaptive_recip_offset2 = 3
+bias_input = 256
+weight_max = 1099511627776
+hash_mul = 0x2F0B3A49
+c0_mul = 0x9E3779B1
+seed_mul = 0x9E3779B1
+seed_add = 0x7F4A7C15
+finish_mul = 0x85EBCA6B
+finish_shift1 = 16               # the hash's two xor-shifts (murmur-style finish)
+finish_shift2 = 13
+squash_knots = [1, 2, 4, 6, 10, 17, 27, 45, 74, 120, 194, 311, 488, 747, 1102, 1546, 2048, 2550, 2994,
+                3349, 3608, 3785, 3902, 3976, 4022, 4051, 4069, 4079, 4086, 4090, 4092, 4094, 4095]
+
+[modes.latin_fast.base]
+kind = "unigram_zipf"
+table = "toy_bigram"
+zeta = 0.3333333333333333
+u_scale_bits = 40
+zipf_weight_bits = 40
+zipf_offset = 10
+
+[modes.latin_fast.mixer]
+kind = "trust"
+eta = 0.06623160779297654
+alpha = 0.0066231607792976545
+
+[modes.latin_fast.predictors.corpus_pairs]
+kind = "corpus_pairs"
+table = "toy_bigram"
+discount = 0.75
+trust0 = 1.0
+
+[modes.latin_fast.predictors.text_pairs]
+kind = "text_pairs"
+confidence_k = 1.3815625984855935
+trust0 = 0.6749999999999999
+
+[modes.latin_fast.predictors.text_counts]
+kind = "text_counts"
+confidence_k = 96.73971047973636
+trust0 = 1.1540195341848232
+
+# ---------------------------------------------------------------- mode latin_max (spelled)
+[modes.latin_max]
+id = 5
+kind = "model"
+language = "latin_toy"
+dictionary = "word_list"
+tokenizer = "overlay"
+word_model = "mixture"
+word_coder = "spelled"
+table_scale_bits = 60
+channels = ["corpus_pairs", "text_pairs", "text_counts", "text_triples", "text_gap_starts",
+            "corpus_gap_starts", "prefix_class", "recency"]
+
+[modes.latin_max.gap]
+kind = "punctuation"
+groups = [0, 1, 2, 2, 2, 2, 2, 2]
+
+[modes.latin_max.template]
+kind = "cm"
+prob_bits = 12
+fix_bits = 16
+table = "toy_template"
+weights = "toy_template_weights"
+orders = [0, 1, 2, 3, 4]
+adaptive = [1, 2, 3, 4, 6]
+word_context = true
+word_distance_cap = 3
+word_seed_order = 15
+static_scale = 16
+conf_level = 2
+learning_rate = 12
+count_limit = 60
+adaptive_start = 32768
+adaptive_min = 32
+adaptive_max = 65503
+adaptive_recip_offset2 = 3
+bias_input = 256
+weight_max = 1099511627776
+hash_mul = 0x2F0B3A49
+c0_mul = 0x9E3779B1
+seed_mul = 0x9E3779B1
+seed_add = 0x7F4A7C15
+finish_mul = 0x85EBCA6B
+finish_shift1 = 16               # the hash's two xor-shifts (murmur-style finish)
+finish_shift2 = 13
+squash_knots = [1, 2, 4, 6, 10, 17, 27, 45, 74, 120, 194, 311, 488, 747, 1102, 1546, 2048, 2550, 2994,
+                3349, 3608, 3785, 3902, 3976, 4022, 4051, 4069, 4079, 4086, 4090, 4092, 4094, 4095]
+
+[modes.latin_max.base]
+kind = "unigram_zipf"
+table = "toy_bigram"
+zeta = 0.3333333333333333
+u_scale_bits = 40
+zipf_weight_bits = 40
+zipf_offset = 10
+
+[modes.latin_max.mixer]
+kind = "trust"
+eta = 0.05519300649414712
+alpha = 0.0030662781385637295
+
+[modes.latin_max.predictors.corpus_pairs]
+kind = "corpus_pairs"
+table = "toy_bigram"
+discount = 0.75
+trust0 = 1.0
+
+[modes.latin_max.predictors.text_pairs]
+kind = "text_pairs"
+confidence_k = 1.3815625984855935
+trust0 = 0.6749999999999999
+
+[modes.latin_max.predictors.text_counts]
+kind = "text_counts"
+confidence_k = 96.73971047973636
+trust0 = 1.1540195341848232
+
+[modes.latin_max.predictors.text_triples]
+kind = "text_triples"
+confidence_k = 0.08333333333333333
+trust0 = 0.414
+
+[modes.latin_max.predictors.text_gap_starts]
+kind = "text_gap_starts"
+confidence_k = 1.7066666666666663
+trust0 = 0.44999999999999996
+groups = [1, 2]
+
+[modes.latin_max.predictors.corpus_gap_starts]
+kind = "corpus_gap_starts"
+table = "toy_gap_starts"
+discount = 0.5
+trust0 = 1.05
+groups = [1, 2]
+
+[modes.latin_max.predictors.prefix_class]
+kind = "null"                    # Hebrew proclitic classes - this language has none: the plate
+
+[modes.latin_max.predictors.recency]
+kind = "recency"
+window = 30
+confidence_k = 8.0
+trust0 = 0.1
+
+[modes.latin_max.speller]
+trie = "toy_trie"
+q_bits = 30
+inputs = ["cross_word", "within_word", "text_letters"]
+
+[modes.latin_max.letter_chains.cross]
+context = "cross"
+table = "toy_letters"
+max_order = 6
+beta = 3.0727272727272728
+add_count = 1.0
+symbol_bits = 6                  # 52 letters + word end = 53 symbols -> 6 bits
+
+[modes.latin_max.letter_chains.within]
+context = "within"
+table = "toy_letters"
+max_order = 4
+beta = 265.2586360566414
+add_count = 1.0
+symbol_bits = 6
+
+[modes.latin_max.letters.cross_word]
+kind = "static_chain"
+chain = "cross"
+
+[modes.latin_max.letters.within_word]
+kind = "static_chain"
+chain = "within"
+
+[modes.latin_max.letters.text_letters]
+kind = "text_letters"
+base_chain = "cross"
+max_order = 6
+gamma = 4.0
+
+[modes.latin_max.letter_mixer]
+kind = "geometric"
+lr = 0.0019560858721697875
+start_weights = [0.65, 0.23636363636363636, 0.0001953125, 0.13]
+depth_max = 4
+conf_buckets = [0.3, 0.6, 0.9, 0.99]
+start_sets = "toy_letter_sets"
+
+# ================================================================ ENGLISH - a real third language, rows + tables only
+# Built from a random 40 MB sample of English Wikipedia (Hugging Face dataset wikimedia/wikipedia, dump
+# 20231101.en, CC BY-SA; one JSON article per line) by
+#     python -m hebzip.ops.build_langpack --language en --corpus <enwiki_random.jsonl> --corpus-format jsonl
+# The corpus itself is not part of this repository. No code was changed for English.
+# Every model number below is copied from the Hebrew modes (NOT tuned for English); the differences are
+# rows: letters A-Z a-z, English punctuation in the gap classes, no proclitic classes (prefix_class = plate),
+# a word list built from the corpus (Hebrew's was given), and no pretrained letter start sets (the recipe's
+# fallback: the letter mixer starts from start_weights everywhere).
+# ---------------------------------------------------------------- tables (pinned by sha256)
+[tables.en_words]
+path = "tables/en/words.txt"
+sha256 = "4b867a3e6fd640ee1d1c53327882689b2dccf008b5a8b8691e2f020d1aa2367b"
+bytes = 1844186
+
+[tables.en_words.recipe]
+kind = "corpus_words"
+held_every = 40                  # held-out articles (every 40th line) never enter the word list
+
+[tables.en_bigram]
+path = "tables/en/bigram.npz"
+sha256 = "7bcb365c64f257570cb4fdad98eb5fd713d6a83c787145664dcd89b164120231"
+bytes = 42448282
+
+[tables.en_bigram.recipe]
+kind = "word_pairs"
+held_every = 40
+
+[tables.en_template]
+path = "tables/en/template.npz"
+sha256 = "200dc5492bbe3f97652efaffddb8ec0390ab0f1305ba0569d999b0025e773833"
+bytes = 1406416
+
+[tables.en_template.recipe]
+kind = "template_prior"
+held_every = 40
+min_count = 128
+count_levels = [2, 4, 16, 64]
+
+[tables.en_template_weights]
+path = "tables/en/template_weights.json"
+sha256 = "5aa031e85ef771aba6c2bea0ec11e7e841828703f743fc0b4ce800589db4953c"
+bytes = 1677
+
+[tables.en_template_weights.recipe]
+kind = "template_weights"
+held_every = 40
+fit_cut = 400
+fit_passes = 1
+start_weight = 16384
+
+[tables.en_gap_starts]
+path = "tables/en/gap_starts.npz"
+sha256 = "080cd496b84be6010c0a7e20bb9a0644b7dc2941facab9b8187953624853d145"
+bytes = 453334
+
+[tables.en_gap_starts.recipe]
+kind = "gap_starts"
+held_every = 40
+keep_top = 4000
+
+[tables.en_trie]
+path = "tables/en/trie.npz"
+sha256 = "bd508a56ca4390d0a4c3c73cd445397d6c17ae5b66ce0e6910c6d4d1fd52b105"
+bytes = 6935822
+
+[tables.en_trie.recipe]
+kind = "letter_trie"
+columns = 24
+
+[tables.en_letters]
+path = "tables/en/letters.npz"
+sha256 = "48c30d22754a3fdc1e9b8d24504c89087e9fdb5d9ffca43c5d49e33bfc2ae0cf"
+bytes = 138272286
+
+[tables.en_letters.recipe]
+kind = "letter_chains"
+held_every = 40
+
+[tables.en_letter_sets]
+path = "tables/en/letter_sets.json"
+sha256 = "f87030e7583a81ee2f360a7af13826756216d85291649c4f962e6b9ff8b74c6c"
+bytes = 13
+
+[tables.en_letter_sets.recipe]
+kind = "letter_start_sets"      # no pretrained sets (Hebrew's were tuned by a search): start_weights everywhere
+
+# ---------------------------------------------------------------- language pack
+[languages.en]
+letters = [[0x41, 0x5A], [0x61, 0x7A]]              # A..Z, a..z (capitalised forms are their own words)
+marks = [[0x0300, 0x036F]]                          # combining accents
+word_list = "en_words"
+slot_plain = 0xFF
+slot_marked = 0xFE
+mark_separator = 0xFC
+marked_end = 0xFD
+sentence_end = [".", "!", "?", "\n"]
+prefixes = ""                                       # no proclitic letters in English
+gap_space = " \t\r "
+gap_marks = [",;", ":", "\"'“”‘’", "()[]{}", "-–—"]   # gap classes 2..6: comma-like, colon, quotes, brackets, dashes
+
+# ---------------------------------------------------------------- mode en_fast
+[modes.en_fast]
+id = 6
+kind = "model"
+language = "en"
+dictionary = "word_list"
+tokenizer = "overlay"
+word_model = "mixture"
+word_coder = "direct"
+table_scale_bits = 60
+channels = ["corpus_pairs", "text_pairs", "text_counts"]
+
+[modes.en_fast.gap]
+kind = "none"
+
+[modes.en_fast.template]
+kind = "cm"
+prob_bits = 12
+fix_bits = 16
+table = "en_template"
+weights = "en_template_weights"
+orders = [0, 1, 2, 3, 4, 6, 8]
+adaptive = [1, 2, 3, 4, 6]
+word_context = true
+word_distance_cap = 3
+word_seed_order = 15
+static_scale = 16
+conf_level = 2
+learning_rate = 12
+count_limit = 60
+adaptive_start = 32768
+adaptive_min = 32
+adaptive_max = 65503
+adaptive_recip_offset2 = 3
+bias_input = 256
+weight_max = 1099511627776
+hash_mul = 0x2F0B3A49
+c0_mul = 0x9E3779B1
+seed_mul = 0x9E3779B1
+seed_add = 0x7F4A7C15
+finish_mul = 0x85EBCA6B
+finish_shift1 = 16
+finish_shift2 = 13
+squash_knots = [1, 2, 4, 6, 10, 17, 27, 45, 74, 120, 194, 311, 488, 747, 1102, 1546, 2048, 2550, 2994,
+                3349, 3608, 3785, 3902, 3976, 4022, 4051, 4069, 4079, 4086, 4090, 4092, 4094, 4095]
+
+[modes.en_fast.base]
+kind = "unigram_zipf"
+table = "en_bigram"
+zeta = 0.3333333333333333
+u_scale_bits = 40
+zipf_weight_bits = 40
+zipf_offset = 10
+
+[modes.en_fast.mixer]
+kind = "trust"
+eta = 0.06623160779297654
+alpha = 0.0066231607792976545
+
+[modes.en_fast.predictors.corpus_pairs]
+kind = "corpus_pairs"
+table = "en_bigram"
+discount = 0.8522727272727273
+trust0 = 1.0
+
+[modes.en_fast.predictors.text_pairs]
+kind = "text_pairs"
+confidence_k = 1.3815625984855935
+trust0 = 0.6749999999999999
+
+[modes.en_fast.predictors.text_counts]
+kind = "text_counts"
+confidence_k = 96.73971047973636
+trust0 = 1.1540195341848232
+
+# ---------------------------------------------------------------- mode en_max (spelled)
+[modes.en_max]
+id = 7
+kind = "model"
+language = "en"
+dictionary = "word_list"
+tokenizer = "overlay"
+word_model = "mixture"
+word_coder = "spelled"
+table_scale_bits = 60
+channels = ["corpus_pairs", "text_pairs", "text_counts", "text_triples", "text_gap_starts",
+            "corpus_gap_starts", "prefix_class", "recency"]
+
+[modes.en_max.gap]
+kind = "punctuation"
+groups = [0, 1, 2, 2, 2, 2, 2, 2]
+
+[modes.en_max.template]
+kind = "cm"
+prob_bits = 12
+fix_bits = 16
+table = "en_template"
+weights = "en_template_weights"
+orders = [0, 1, 2, 3, 4, 6, 8]
+adaptive = [1, 2, 3, 4, 6]
+word_context = true
+word_distance_cap = 3
+word_seed_order = 15
+static_scale = 16
+conf_level = 2
+learning_rate = 12
+count_limit = 60
+adaptive_start = 32768
+adaptive_min = 32
+adaptive_max = 65503
+adaptive_recip_offset2 = 3
+bias_input = 256
+weight_max = 1099511627776
+hash_mul = 0x2F0B3A49
+c0_mul = 0x9E3779B1
+seed_mul = 0x9E3779B1
+seed_add = 0x7F4A7C15
+finish_mul = 0x85EBCA6B
+finish_shift1 = 16
+finish_shift2 = 13
+squash_knots = [1, 2, 4, 6, 10, 17, 27, 45, 74, 120, 194, 311, 488, 747, 1102, 1546, 2048, 2550, 2994,
+                3349, 3608, 3785, 3902, 3976, 4022, 4051, 4069, 4079, 4086, 4090, 4092, 4094, 4095]
+
+[modes.en_max.base]
+kind = "unigram_zipf"
+table = "en_bigram"
+zeta = 0.3333333333333333
+u_scale_bits = 40
+zipf_weight_bits = 40
+zipf_offset = 10
+
+[modes.en_max.mixer]
+kind = "trust"
+eta = 0.05519300649414712
+alpha = 0.0030662781385637295
+
+[modes.en_max.predictors.corpus_pairs]
+kind = "corpus_pairs"
+table = "en_bigram"
+discount = 0.8522727272727273
+trust0 = 1.0
+
+[modes.en_max.predictors.text_pairs]
+kind = "text_pairs"
+confidence_k = 1.3815625984855935
+trust0 = 0.6749999999999999
+
+[modes.en_max.predictors.text_counts]
+kind = "text_counts"
+confidence_k = 96.73971047973636
+trust0 = 1.1540195341848232
+
+[modes.en_max.predictors.text_triples]
+kind = "text_triples"
+confidence_k = 0.08333333333333333
+trust0 = 0.414
+
+[modes.en_max.predictors.text_gap_starts]
+kind = "text_gap_starts"
+confidence_k = 1.7066666666666663
+trust0 = 0.44999999999999996
+groups = [1, 2]
+
+[modes.en_max.predictors.corpus_gap_starts]
+kind = "corpus_gap_starts"
+table = "en_gap_starts"
+discount = 0.046875
+trust0 = 1.05
+groups = [1, 2]
+
+[modes.en_max.predictors.prefix_class]
+kind = "null"                    # Hebrew proclitic classes - English has none: the plate
+
+[modes.en_max.predictors.recency]
+kind = "recency"
+window = 30
+confidence_k = 8.0
+trust0 = 0.1
+
+[modes.en_max.speller]
+trie = "en_trie"
+q_bits = 30
+inputs = ["cross_word", "within_word", "text_letters"]
+
+[modes.en_max.letter_chains.cross]
+context = "cross"
+table = "en_letters"
+max_order = 6
+beta = 3.0727272727272728
+add_count = 1.0
+symbol_bits = 6                  # 52 letters + word end = 53 symbols -> 6 bits
+
+[modes.en_max.letter_chains.within]
+context = "within"
+table = "en_letters"
+max_order = 4
+beta = 265.2586360566414
+add_count = 1.0
+symbol_bits = 6
+
+[modes.en_max.letters.cross_word]
+kind = "static_chain"
+chain = "cross"
+
+[modes.en_max.letters.within_word]
+kind = "static_chain"
+chain = "within"
+
+[modes.en_max.letters.text_letters]
+kind = "text_letters"
+base_chain = "cross"
+max_order = 6
+gamma = 4.0
+
+[modes.en_max.letter_mixer]
+kind = "geometric"
+lr = 0.0019560858721697875
+start_weights = [0.65, 0.23636363636363636, 0.0001953125, 0.13]
+depth_max = 4
+conf_buckets = [0.3, 0.6, 0.9, 0.99]
+start_sets = "en_letter_sets"

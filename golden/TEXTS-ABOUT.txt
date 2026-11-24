@@ -1,0 +1,34 @@
+The golden test texts - where they come from
+============================================
+
+texts/own_*.txt (8 Hebrew texts) and texts_en/own_en_*.txt (2 English texts)
+    Written for this project in November 2026 and released with it, under the same terms
+    as the rest of the repository. They are original wording, not copied from any source.
+    Every person, family, building and place in them is invented; they contain no real
+    names, phone numbers, addresses or e-mail addresses.
+
+        own_letter.txt    a letter to a school parents' committee      (~145 words)
+        own_story.txt     a short story                                (~200 words)
+        own_notice.txt    a notice to the residents of a building      (~100 words)
+        own_page.txt      a full page of prose (an essay)              (~380 words)
+        own_message.txt   a short message to a parent                  (~100 words)
+        own_diary.txt     a personal diary entry                       (~270 words)
+        own_moving.txt    a personal account of moving house           (~880 words)
+        own_journal.txt   a long personal summer journal               (~2,400 words)
+        own_en_note.txt   (English) a short note to a friend           (~130 words)
+        own_en_story.txt  (English) a short story                      (~260 words)
+
+texts/wiki_*.txt (5 Hebrew texts)
+    Opening paragraphs of Hebrew Wikipedia articles - see WIKIPEDIA-SOURCES.txt for the
+    article of each file and its licence (CC BY-SA 4.0).
+
+The Latin toy pack's samples (langpacks/latin_toy/samples/*.txt) were written inside the
+project as test material for the toy language.
+
+<mode>/<text>.hz are the golden packages: what the tool must write for each text, byte for
+byte. They are made by `python -m tests.golden.make_golden` and listed with their sha256
+in manifest.json.
+
+-----------------------------------------------------------------------------------------
+בעברית: שמונת הטקסטים העבריים own_* ושני הטקסטים האנגליים own_en_* נכתבו במיוחד בשביל
+הפרויקט הזה (נובמבר 2026) ומשוחררים יחד איתו. כל האנשים והמקומות בהם בדויים.

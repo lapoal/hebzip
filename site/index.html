@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; worker-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>hebzip - compress Hebrew and English text in your browser</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="assets/style.css">
+<script type="module" src="assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="container topbar-inner">
+    <span class="logo" aria-hidden="true"></span>
+    <h1>hebzip</h1>
+    <span class="Label">runs in your browser</span>
+    <a class="topbar-link" id="link-repo" href="#">Source code and README</a>
+  </div>
+</header>
+
+<main class="container">
+  <p class="lead">Lossless compression for short Hebrew and English texts. It works so well on short
+    messages because it ships with prior knowledge: tables of words and word pairs built from Wikipedia
+    (<span id="mb-he">25.3</span> MB for Hebrew, <span id="mb-en">45.7</span> MB for English). It is also slow
+    compared with gzip or zstd - here it runs as pure Python inside your browser.</p>
+
+  <div class="flash info" role="note"><strong>Your text never leaves your browser.</strong> This page downloads
+    only its own files (the engine and the tables, from this site) and sends nothing anywhere. No cookies, no
+    analytics. Your browser keeps the downloaded files in its normal cache, so the next visit is fast.</div>
+
+  <section class="Box" aria-labelledby="load-title">
+    <div class="Box-header"><h2 id="load-title">Loading</h2></div>
+    <div class="Box-row load-row">
+      <label for="bar-fast">Engine + Hebrew pack</label>
+      <progress id="bar-fast" max="1" value="0"></progress>
+      <span id="txt-fast" class="muted num" aria-live="polite">waiting</span>
+    </div>
+    <div class="Box-row load-row">
+      <label for="bar-en_fast">English pack</label>
+      <progress id="bar-en_fast" max="1" value="0"></progress>
+      <span id="txt-en_fast" class="muted num" aria-live="polite">after the Hebrew pack</span>
+    </div>
+  </section>
+
+  <section class="Box" aria-labelledby="in-title">
+    <div class="Box-header"><h2 id="in-title">Your text</h2></div>
+    <div class="Box-body">
+      <label for="text" class="sr-only">Text to compress</label>
+      <textarea id="text" dir="auto" rows="8" spellcheck="false" placeholder="Paste Hebrew or English text here, or drop a .txt file (UTF-8) - or a .hz package to open it."></textarea>
+      <div class="row-between">
+        <span id="counter" class="muted num" aria-live="polite">0 bytes</span>
+        <span id="pack" class="muted"></span>
+      </div>
+      <div class="buttons">
+        <button id="go" class="btn btn-primary" type="button" disabled>Compress</button>
+        <button id="sample-he" class="btn" type="button">Hebrew sample</button>
+        <button id="sample-en" class="btn" type="button">English sample</button>
+        <label class="btn" for="file">Open a file (.txt or .hz)</label>
+        <input id="file" class="sr-only" type="file" accept=".txt,.hz,text/plain">
+        <button id="clear" class="btn" type="button">Clear</button>
+      </div>
+      <div id="notice" class="flash" role="status" hidden></div>
+      <div id="work" class="work" hidden aria-live="polite">
+        <progress id="bar-work" max="1" value="0" aria-label="Progress (estimated)"></progress>
+        <span id="txt-work" class="muted"></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="result" class="Box" hidden aria-labelledby="out-title">
+    <div class="Box-header"><h2 id="out-title">Result in your browser</h2></div>
+    <div class="table-wrap">
+      <table class="table">
+        <caption class="sr-only">Sizes of your text</caption>
+        <thead><tr><th scope="col">Tool</th><th scope="col" class="n">Bytes</th><th scope="col" class="n">Saved</th><th scope="col" class="n">Time</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div class="Box-row muted" id="verdict"></div>
+    <div class="Box-row buttons">
+      <a id="download" class="btn" download="text.hz" href="#">Download the package (.hz)</a>
+      <button id="share" class="btn" type="button">Share your result</button>
+    </div>
+  </section>
+
+  <section id="opened" class="Box" hidden aria-labelledby="open-title">
+    <div class="Box-header"><h2 id="open-title">Opened package</h2></div>
+    <div class="Box-row" id="opened-facts"></div>
+    <div class="Box-body"><pre id="opened-text" dir="auto" class="opened-text"></pre></div>
+    <div class="Box-row buttons"><a id="save-text" class="btn" download="text.txt" href="#">Save the text (exact bytes, .txt)</a></div>
+  </section>
+
+  <section class="Box" aria-labelledby="bench-title">
+    <div class="Box-header"><h2 id="bench-title">Recorded benchmark (not measured here)</h2></div>
+    <div class="Box-body" id="bench">Loading the recorded numbers...</div>
+    <div class="Box-row muted">The claim is narrow: short Hebrew (and English) messages, with the tables above
+      shipped. paq8px, PPMd and the others start empty and learn only from the text itself - that is why short texts are hard for them.
+      paq8px (GPL) is not shipped - build it and point the bench at it. The project texts were written by an AI
+      model for the project. Reproduce everything with one command: <code>python -m atar.bench run</code>
+      (in <code>tools/compare_page</code>; see the README).</div>
+  </section>
+
+  <section class="Box" aria-labelledby="how-title">
+    <div class="Box-header"><h2 id="how-title">How it works (short)</h2></div>
+    <div class="Box-body">
+      <p>The text is split into words and the bytes between them. Each word is a number in a word list sorted by
+        frequency. Several predictors guess the next word - word pairs counted on Wikipedia, and what this text
+        has said so far (a notebook that learns while it reads) - and a trust mixer weighs them. The bytes
+        between words go through a small context-mixing model. A range coder turns the probabilities into bits.
+        The decoder runs the same models and gets exactly the same text back.</p>
+      <p>The website runs mode <code>fast</code> (Hebrew) and <code>en_fast</code> (English). The downloadable tool also
+        has <code>max</code> and <code>max_plus</code> (letter-by-letter spelling, word classes, a topic channel; a few
+        percent smaller, slower, bigger tables). <a id="link-method" href="#">Full method overview in the README</a>.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="container footer muted">
+  <p>Code: MIT licence. Tables: CC BY-SA 4.0 - <a href="tables/CREDITS.md">credits and sources</a> (Hebrew and English
+    Wikipedia contributors; fastText vectors, Grave et al. 2018), <a href="tables/LICENSE">licence</a>.
+    Engine: <a href="pyodide/NOTICE-pyodide.txt">Pyodide 314.0.8 (MPL-2.0) and CPython</a>, copied unmodified.
+    Ideas from the PAQ family and the context-mixing literature (Matt Mahoney and others); no code copied.</p>
+  <p id="build-line"></p>
+</footer>
+
+<dialog id="share-dialog" aria-labelledby="share-title">
+  <h2 id="share-title">Share your result</h2>
+  <p>This opens a new issue on GitHub, filled with exactly the text below - numbers only, not your text. Nothing is
+    sent until you press <strong>Submit</strong> on GitHub (you need a GitHub account there).</p>
+  <pre id="share-preview" class="share-preview"></pre>
+  <div class="buttons">
+    <a id="share-open" class="btn btn-primary" href="#" target="_blank" rel="noopener noreferrer">Open GitHub</a>
+    <button id="share-cancel" class="btn" type="button">Cancel</button>
+  </div>
+</dialog>
+</body>
+</html>

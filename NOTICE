@@ -1,0 +1,38 @@
+hebzip - lossless compression for short Hebrew and English texts
+Copyright (c) 2026 lapoal
+
+What is under which licence
+---------------------------
+- The code (hebzip/, tests/, tools/, site/assets/, site/index.html): MIT - see LICENSE.
+- The tables (tables/, site/tables/, the tables archive on the Releases page): CC BY-SA 4.0 -
+  see tables/LICENSE and tables/CREDITS.md (Hebrew and English Wikipedia contributors; fastText
+  word vectors, Grave et al. 2018). Exception: tables/latin_toy/ is MIT (built from project text).
+- golden/texts/wiki_*.txt and tools/compare_page/bench/texts/ (Wikipedia text): CC BY-SA 4.0,
+  sources in golden/WIKIPEDIA-SOURCES.txt and tools/compare_page/bench/texts/SOURCES.txt.
+- golden/texts/own_*.txt, golden/texts_en/: written for this project (by an AI model), MIT.
+- site/pyodide/: Pyodide 314.0.8 (MPL-2.0), CPython (PSF License), NumPy (BSD-3-Clause), copied
+  unmodified - see site/pyodide/NOTICE-pyodide.txt and the licence files next to it.
+
+Third-party software used as dependencies (installed by pip, not included here)
+------------------------------------------------------------------------------
+numpy (BSD-3-Clause and bundled licences), numba and llvmlite (BSD-2-Clause; llvmlite also
+Apache-2.0 WITH LLVM-exception), zstandard (BSD-3-Clause), pyppmd (LGPL-2.1-or-later, used
+unmodified as a library). The comparison page and the benchmark (tools/compare_page/) also run
+Node.js's built-in brotli and, optionally, paq8px.
+
+paq8px (GPL-2.0-or-later) is NOT included. The benchmark can run it as a separate program that you
+build yourself (https://github.com/hxim/paq8px) and point to with --paq8px.
+
+Ideas, not code
+---------------
+The template model and the mixers use well-known context-mixing ideas from the PAQ family of
+compressors by Matt Mahoney and contributors (lpaq1, paq8, paq8px) and the literature around them:
+logistic mixing, adaptive bit counts, mixer weights selected by context, word classes. No code from
+them was copied. The squash interpolation points (squash_knots in config/hebzip.toml) are computed
+by hebzip/ops/knots.py from the logistic function.
+
+Test data rebuilt by the user (not included)
+---------------------------------------------
+The benchmark's "real comments" set is rebuilt from the OMILab Hebrew sentiment benchmark
+(https://github.com/omilab/Neural-Sentiment-Analyzer-for-Modern-Hebrew, MIT, (c) 2018 OMIlab, The Open
+University of Israel; Amram, Ben-David, Tsarfaty, COLING 2018). Its text is not shipped.

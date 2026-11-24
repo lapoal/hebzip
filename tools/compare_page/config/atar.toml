@@ -1,0 +1,135 @@
+# hebzip comparison page - every path, flag and limit lives here, not in code.
+# A typo in a field name stops the server at startup with a Hebrew message (a bad row is an error at start-up).
+# Relative paths are relative to this page's folder (tools/compare_page). Two words may stand in for a machine
+# path: {python} = the Python that runs the page, {repo} = the repository root (two folders up).
+
+[server]
+host = "127.0.0.1"      # this computer only - never the network
+port = 8837
+open_browser = true
+
+[limits]
+max_text_bytes = 204800      # 200 KB of extracted text
+max_upload_bytes = 20971520  # 20 MB raw upload (a .docx with pictures is bigger than its text)
+poll_ms = 700                # how often the page asks "what's new"
+
+[paths]
+material = "material"   # the ONE folder where text may exist, and only while a job runs (machine-and-material rule)
+logs = "logs"
+
+# Tools that stay loaded: started ONCE in the background when the server starts, only if a row below uses
+# them (kind = "service"). The page shows "טוען את הכלי…" and then "מוכן" + the load time. Closing the window
+# ends them too. The protocol: hebzip/interface/serve.py of this repository.
+[services.hebzip]
+version = "hebzip, loaded once (python -m hebzip serve)"
+cwd = "{repo}"
+command = ["{python}", "-m", "hebzip", "serve", "--modes", "fast,max,max_plus"]
+ready_timeout_s = 600   # building the modes takes a few seconds; the first run after a code change compiles (~1 min)
+
+# The table rows, in run order: fast tools first, ours last.
+# kind = which drawer runs it: gzip | xz | bz2 | ppmd7 | command | service | null
+# Our rows carry the options of both ways to run hebzip: kind = "service" (stays loaded, uses service + mode)
+# or kind = "command" (a new process per call, uses cwd/compress/decompress/memory_*).
+# To switch between them, change only the kind word of the row.
+
+[[tools]]
+id = "zip"
+label = "ZIP (gzip)"
+kind = "gzip"
+ours = false
+timeout_s = 600
+options = { level = 9 }
+
+[[tools]]
+id = "bz2"
+label = "bzip2"
+kind = "bz2"
+ours = false
+timeout_s = 600
+options = { level = 9 }
+
+[[tools]]
+id = "xz"
+label = "xz"
+kind = "xz"
+ours = false
+timeout_s = 600
+options = { preset = 9, extreme = true }
+
+[[tools]]
+# PPMd7 (variant H, as in 7-Zip). Not the PPMd8 order-8 setting ("I8"): pyppmd sometimes
+# cannot decode what it wrote there (a known pyppmd decoding fault). The package keeps the
+# original length in 4 bytes, because the PPMd7 decoder needs it - counted in the size.
+id = "ppmd"
+label = "PPMd"
+kind = "ppmd7"
+ours = false
+timeout_s = 900
+options = { order = 8, memory_mb = 64 }
+
+[[tools]]
+# paq8px is NOT included (it is GPL software). The row is switched off (kind = "null": the page shows
+# "לא מחובר" and never a size). To compare with it: build paq8px yourself from its sources
+# (https://github.com/hxim/paq8px), then replace this row's kind and add its options, e.g.
+#     kind = "command"
+#     [tools.options]
+#     version = "v217, -8L"
+#     cwd = "{work}"                     # paq8px writes a temp file into the current folder
+#     compress = ['<path to>/paq8px.exe', "-8L", "{in}", "{out}"]
+#     decompress = ['<path to>/paq8px.exe', "-d", "{in}", "{out}"]
+#     memory_mb = 2300                   # -8L reserves ~2.2 GB; checked before starting
+#     memory_words = ["memory", "alloc"]
+id = "paq8px"
+label = "paq8px"
+kind = "null"
+ours = false
+timeout_s = 1800
+
+[[tools]]
+# the light mode, shown next to max
+id = "fast"
+label = "fast"
+kind = "service"
+ours = true
+timeout_s = 3600
+[tools.options]
+version = "hebzip"
+service = "hebzip"
+mode = "fast"
+cwd = "{repo}"
+compress = ["{python}", "-m", "hebzip", "compress", "--mode", "fast", "--force", "{in}", "{out}"]
+decompress = ["{python}", "-m", "hebzip", "decompress", "--force", "{in}", "{out}"]
+memory_mb = 0
+memory_words = ["MemoryError"]
+
+[[tools]]
+id = "max"
+label = "max"
+kind = "service"
+ours = true
+timeout_s = 3600
+[tools.options]
+version = "hebzip"
+service = "hebzip"
+mode = "max"
+cwd = "{repo}"
+compress = ["{python}", "-m", "hebzip", "compress", "--mode", "max", "--force", "{in}", "{out}"]
+decompress = ["{python}", "-m", "hebzip", "decompress", "--force", "{in}", "{out}"]
+memory_mb = 0
+memory_words = ["MemoryError"]
+
+[[tools]]
+id = "max_plus"
+label = "max_plus"
+kind = "service"
+ours = true
+timeout_s = 3600
+[tools.options]
+version = "hebzip"
+service = "hebzip"
+mode = "max_plus"
+cwd = "{repo}"
+compress = ["{python}", "-m", "hebzip", "compress", "--mode", "max_plus", "--force", "{in}", "{out}"]
+decompress = ["{python}", "-m", "hebzip", "decompress", "--force", "{in}", "{out}"]
+memory_mb = 0
+memory_words = ["MemoryError"]

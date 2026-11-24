@@ -1,0 +1,22 @@
+The bench texts shipped in this folder - where they come from and their licence
+================================================================================
+
+Every file here is a plain-text extract of one Wikipedia article. The exact title, URL, creation
+date (for the "fresh" ones) and retrieval date of each file are in ../manifest.json, with its
+sha256. How each was cut is written there per set ("about").
+
+    he_fresh/       5 Hebrew Wikipedia articles created in November 2026
+    en_fresh/       5 English Wikipedia articles created on 17 November 2026
+    en_short/       the lead of 12 well-known English Wikipedia articles
+    en_long/        4 long English Wikipedia articles
+    en_long_fresh/  1 long English Wikipedia article created on 14 November 2026
+
+Licence: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0),
+https://creativecommons.org/licenses/by-sa/4.0/
+(c) the Wikipedia contributors of each article; the authors are listed in the article's history.
+Changes: converted to plain text by the MediaWiki API (prop=extracts), headings and short lines
+removed, cut to the length given in the manifest (Hebrew fresh: parenthesised asides removed).
+
+The Hebrew golden texts the bench also uses (golden/texts/wiki_*.txt, own_*.txt) are described in
+golden/WIKIPEDIA-SOURCES.txt and golden/TEXTS-ABOUT.txt. The everyday texts are NOT shipped: they
+are rebuilt from the public datasets named in the manifest (see ../README.txt).
