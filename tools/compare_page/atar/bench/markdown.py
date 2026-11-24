@@ -69,6 +69,11 @@ def render(summary: dict[str, Any], data: dict[str, Any], sizes: dict[str, int])
     """The whole Markdown page."""
     tools = data["tools"]
     out = ["# hebzip - public measurement", "", f"Machine: {data.get('machine', '?')}", ""]
+    first = data.get("machine")
+    later = [f"{info['label']} ({', '.join(info['languages'])}): {info['measured_on']}"
+             for info in tools.values() if info.get("measured_on", first) != first]
+    if later:
+        out += ["Rows measured in a later run:", "", *(f"- {line}" for line in later), ""]
     for language in dict.fromkeys(g["language"] for g in summary["groups"]):
         for key in ("as_is", "no_header"):
             out += [f"## {language}: {WHAT[key]} (in brackets: % vs our best mode on that group)", ""]

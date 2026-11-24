@@ -42,6 +42,20 @@
      "pct_vs_ours": 135.7,
      "pct_vs_ours_no_header": 134.2
     },
+    "zstd_dict_he_112k": {
+     "as_is": 3034,
+     "no_header": 2964,
+     "raw": 10430,
+     "pct_vs_ours": 73.1,
+     "pct_vs_ours_no_header": 70.1
+    },
+    "zstd_dict_he_1m": {
+     "as_is": 2850,
+     "no_header": 2780,
+     "raw": 10430,
+     "pct_vs_ours": 62.6,
+     "pct_vs_ours_no_header": 59.5
+    },
     "brotli": {
      "as_is": 3641,
      "no_header": 3641,
@@ -148,6 +162,20 @@
      "raw": 8765,
      "pct_vs_ours": 158.0,
      "pct_vs_ours_no_header": 156.2
+    },
+    "zstd_dict_he_112k": {
+     "as_is": 2328,
+     "no_header": 2258,
+     "raw": 8765,
+     "pct_vs_ours": 80.2,
+     "pct_vs_ours_no_header": 76.1
+    },
+    "zstd_dict_he_1m": {
+     "as_is": 2206,
+     "no_header": 2136,
+     "raw": 8765,
+     "pct_vs_ours": 70.7,
+     "pct_vs_ours_no_header": 66.6
     },
     "brotli": {
      "as_is": 2876,
@@ -258,6 +286,20 @@
      "raw": 41846,
      "pct_vs_ours": 86.2,
      "pct_vs_ours_no_header": 85.5
+    },
+    "zstd_dict_he_112k": {
+     "as_is": 11523,
+     "no_header": 11411,
+     "raw": 41846,
+     "pct_vs_ours": 55.6,
+     "pct_vs_ours_no_header": 54.4
+    },
+    "zstd_dict_he_1m": {
+     "as_is": 11194,
+     "no_header": 11082,
+     "raw": 41846,
+     "pct_vs_ours": 51.1,
+     "pct_vs_ours_no_header": 49.9
     },
     "brotli": {
      "as_is": 12561,
@@ -371,6 +413,20 @@
      "pct_vs_ours": 135.6,
      "pct_vs_ours_no_header": 131.7
     },
+    "zstd_dict_he_112k": {
+     "as_is": 2313,
+     "no_header": 2173,
+     "raw": 6831,
+     "pct_vs_ours": 65.6,
+     "pct_vs_ours_no_header": 57.8
+    },
+    "zstd_dict_he_1m": {
+     "as_is": 2219,
+     "no_header": 2079,
+     "raw": 6831,
+     "pct_vs_ours": 58.8,
+     "pct_vs_ours_no_header": 51.0
+    },
     "brotli": {
      "as_is": 2646,
      "no_header": 2646,
@@ -477,6 +533,20 @@
      "raw": 4878,
      "pct_vs_ours": 156.1,
      "pct_vs_ours_no_header": 153.8
+    },
+    "zstd_dict_en_112k": {
+     "as_is": 1792,
+     "no_header": 1722,
+     "raw": 4878,
+     "pct_vs_ours": 68.4,
+     "pct_vs_ours_no_header": 63.4
+    },
+    "zstd_dict_en_1m": {
+     "as_is": 1661,
+     "no_header": 1591,
+     "raw": 4878,
+     "pct_vs_ours": 56.1,
+     "pct_vs_ours_no_header": 50.9
     },
     "brotli": {
      "as_is": 1886,
@@ -585,6 +655,20 @@
      "pct_vs_ours": 135.0,
      "pct_vs_ours_no_header": 131.8
     },
+    "zstd_dict_en_112k": {
+     "as_is": 3307,
+     "no_header": 3139,
+     "raw": 8229,
+     "pct_vs_ours": 66.8,
+     "pct_vs_ours_no_header": 60.2
+    },
+    "zstd_dict_en_1m": {
+     "as_is": 3101,
+     "no_header": 2933,
+     "raw": 8229,
+     "pct_vs_ours": 56.4,
+     "pct_vs_ours_no_header": 49.7
+    },
     "brotli": {
      "as_is": 3359,
      "no_header": 3359,
@@ -680,6 +764,20 @@
      "raw": 11217,
      "pct_vs_ours": 54.5,
      "pct_vs_ours_no_header": 54.3
+    },
+    "zstd_dict_en_112k": {
+     "as_is": 4045,
+     "no_header": 4031,
+     "raw": 11217,
+     "pct_vs_ours": 38.3,
+     "pct_vs_ours_no_header": 37.9
+    },
+    "zstd_dict_en_1m": {
+     "as_is": 3796,
+     "no_header": 3782,
+     "raw": 11217,
+     "pct_vs_ours": 29.8,
+     "pct_vs_ours_no_header": 29.4
     },
     "brotli": {
      "as_is": 3814,
@@ -779,6 +877,20 @@
      "raw": 47676,
      "pct_vs_ours": 76.3,
      "pct_vs_ours_no_header": 76.1
+    },
+    "zstd_dict_en_112k": {
+     "as_is": 16308,
+     "no_header": 16252,
+     "raw": 47676,
+     "pct_vs_ours": 46.2,
+     "pct_vs_ours_no_header": 45.8
+    },
+    "zstd_dict_en_1m": {
+     "as_is": 15371,
+     "no_header": 15315,
+     "raw": 47676,
+     "pct_vs_ours": 37.8,
+     "pct_vs_ours_no_header": 37.4
     },
     "brotli": {
      "as_is": 15677,
@@ -902,6 +1014,20 @@
      "raw": 67872,
      "pct_vs_ours": 107.2,
      "pct_vs_ours_no_header": 105.8
+    },
+    "zstd_dict_he_112k": {
+     "as_is": 19198,
+     "no_header": 18806,
+     "raw": 67872,
+     "pct_vs_ours": 62.0,
+     "pct_vs_ours_no_header": 59.5
+    },
+    "zstd_dict_he_1m": {
+     "as_is": 18469,
+     "no_header": 18077,
+     "raw": 67872,
+     "pct_vs_ours": 55.9,
+     "pct_vs_ours_no_header": 53.3
     },
     "brotli": {
      "as_is": 21724,
@@ -1027,6 +1153,20 @@
      "pct_vs_ours": 84.3,
      "pct_vs_ours_no_header": 83.5
     },
+    "zstd_dict_en_112k": {
+     "as_is": 25452,
+     "no_header": 25144,
+     "raw": 72000,
+     "pct_vs_ours": 48.6,
+     "pct_vs_ours_no_header": 47.2
+    },
+    "zstd_dict_en_1m": {
+     "as_is": 23929,
+     "no_header": 23621,
+     "raw": 72000,
+     "pct_vs_ours": 39.7,
+     "pct_vs_ours_no_header": 38.3
+    },
     "brotli": {
      "as_is": 24736,
      "no_header": 24736,
@@ -1107,6 +1247,26 @@
    "compress_s": 0.0011,
    "decompress_s": 0.0132,
    "texts": 37
+  },
+  "zstd_dict_he_112k": {
+   "compress_s": 0.0156,
+   "decompress_s": 0.012,
+   "texts": 20
+  },
+  "zstd_dict_he_1m": {
+   "compress_s": 0.2442,
+   "decompress_s": 0.0202,
+   "texts": 20
+  },
+  "zstd_dict_en_112k": {
+   "compress_s": 0.0088,
+   "decompress_s": 0.0146,
+   "texts": 17
+  },
+  "zstd_dict_en_1m": {
+   "compress_s": 0.2853,
+   "decompress_s": 0.0209,
+   "texts": 17
   },
   "brotli": {
    "compress_s": 0.0673,

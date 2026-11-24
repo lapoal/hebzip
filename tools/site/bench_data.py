@@ -24,6 +24,7 @@ def _row(tool: str, info: dict[str, Any], summary: dict[str, Any], groups: list[
     timing = summary["timings"].get(tool, {})
     cold = summary["timings"].get(tool + COLD, {})
     return {"id": tool, "label": info["label"], "version": info["version"], "ours": info["ours"],
+            "recorded": _date(str(info.get("measured_on", ""))),
             "header_bytes": info["header_bytes"], "prior": info["prior"],
             "prior_bytes": summary.get("prior_table_bytes", {}).get(tool),
             "sizes": {g["group"]: g["tools"].get(tool, {}).get("as_is") for g in groups},

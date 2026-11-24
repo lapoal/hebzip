@@ -8,8 +8,7 @@
 #                  given on the command line (paq8px is GPL and not shipped: its rows run only with --paq8px);
 #   hebzip_mode / mode_id = our rows only: the mode, and the id its packages must carry (another id =
 #                  the tool's fallback wrote that package; the result says "ok (fallback)").
-# Words: {python} = the Python running the bench, {repo} = the repository root, {work} = the pair's scratch
-# folder, {paq8px} = the scratch copy of the exe given with --paq8px.
+# Words: {python} = this Python, {repo} = the repository root, {work} = the pair's scratch, {paq8px} = its copy.
 
 [bench]
 manifest = "bench/manifest.json"
@@ -17,6 +16,18 @@ results = "bench/results"
 work = "material/bench"          # scratch (dataset texts, packages, paq8px's copy) - deleted at the end
 seen_share = 0.05                # a text with >= 5% of its 8-word runs in a training article = seen in training
 languages = ["he", "en"]
+
+# The zstd dictionaries of the "trained dictionary" rows (python -m atar.bench dicts, atar/bench/zdict.py): from our
+# tables' corpus, same lines held out; zstd's --train defaults, level 19; 112,640 B = zstd's default size.
+[dicts]
+folder = "bench/dicts"
+sizes = [112640, 1048576]
+level = 19
+d = 8
+f = 20
+steps = 4
+accel = 1
+split_point = 0.75
 
 # Our tool stays loaded for the service rows: one service per language, each stopped after its last row
 # (never in memory together with paq8px).
@@ -76,6 +87,49 @@ options = { level = 19 }
 header_bytes = 10                # magic 4 + frame header 3 (with the content size of a 256 B - 64 KB text) + block header 3
 languages = ["he", "en"]
 prior = "none (no dictionary used)"
+[[rows]]                         # zstd given prior knowledge from our tables' Wikipedia sample ([dicts])
+id = "zstd_dict_he_112k"
+label = "zstd -19 + trained dictionary (112,640 B)"
+kind = "zstd_dict"
+ours = false
+timeout_s = 600
+options = { level = 19, dictionary = "{repo}/tools/compare_page/bench/dicts/he_112640.zdict" }
+header_bytes = 14                # as zstd -19 (10) + the 4-byte dictionary id every frame carries (measured)
+languages = ["he"]
+prior = "zstd dictionary trained on the same Hebrew Wikipedia sample as our tables, 112,640 bytes"
+
+[[rows]]
+id = "zstd_dict_he_1m"
+label = "zstd -19 + trained dictionary (1 MiB)"
+kind = "zstd_dict"
+ours = false
+timeout_s = 600
+options = { level = 19, dictionary = "{repo}/tools/compare_page/bench/dicts/he_1048576.zdict" }
+header_bytes = 14
+languages = ["he"]
+prior = "zstd dictionary trained on the same Hebrew Wikipedia sample as our tables, 1,048,576 bytes"
+
+[[rows]]
+id = "zstd_dict_en_112k"
+label = "zstd -19 + trained dictionary (112,640 B)"
+kind = "zstd_dict"
+ours = false
+timeout_s = 600
+options = { level = 19, dictionary = "{repo}/tools/compare_page/bench/dicts/en_112640.zdict" }
+header_bytes = 14
+languages = ["en"]
+prior = "zstd dictionary trained on the same English Wikipedia sample as our tables, 112,640 bytes"
+
+[[rows]]
+id = "zstd_dict_en_1m"
+label = "zstd -19 + trained dictionary (1 MiB)"
+kind = "zstd_dict"
+ours = false
+timeout_s = 600
+options = { level = 19, dictionary = "{repo}/tools/compare_page/bench/dicts/en_1048576.zdict" }
+header_bytes = 14
+languages = ["en"]
+prior = "zstd dictionary trained on the same English Wikipedia sample as our tables, 1,048,576 bytes"
 
 [[rows]]
 id = "brotli"

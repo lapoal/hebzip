@@ -7,6 +7,8 @@ What is under which licence
 - The tables (tables/, site/tables/, the tables archive on the Releases page): CC BY-SA 4.0 -
   see tables/LICENSE and tables/CREDITS.md (Hebrew and English Wikipedia contributors; fastText
   word vectors, Grave et al. 2018). Exception: tables/latin_toy/ is MIT (built from project text).
+- tools/compare_page/bench/dicts/ (zstd dictionaries trained on the same Wikipedia samples, for the
+  benchmark's baseline rows): CC BY-SA 4.0 - see tools/compare_page/bench/dicts/LICENSE.txt.
 - golden/texts/wiki_*.txt and tools/compare_page/bench/texts/ (Wikipedia text): CC BY-SA 4.0,
   sources in golden/WIKIPEDIA-SOURCES.txt and tools/compare_page/bench/texts/SOURCES.txt.
 - golden/texts/own_*.txt, golden/texts_en/: written for this project (by an AI model), MIT.

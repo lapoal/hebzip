@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import tomllib
+from pathlib import Path
 from typing import Any
 
 import pytest
@@ -108,7 +109,8 @@ def test_report_totals_only_complete_exact_groups_and_keeps_seen_texts_apart() -
     assert dirty["tools"]["b"]["as_is"] is None, "a text that did not come back exact must not be summed"
 
 
-def test_a_real_run_measures_exactly_and_leaves_no_text_behind() -> None:
+def _work_config() -> Path:
+    """The real bench.toml with its results and scratch folders moved into tests/_work."""
     config = WORK / "bench.toml"
     text = DEFAULT_BENCH.read_text(encoding="utf-8")
     for row in ('results = "bench/results"', 'work = "material/bench"'):
@@ -116,10 +118,17 @@ def test_a_real_run_measures_exactly_and_leaves_no_text_behind() -> None:
         assert row in text
         text = text.replace(row, f'{key} = "{(WORK / key).as_posix()}"')
     config.write_text(text, encoding="utf-8")
-    assert cli.main(["run", "--config", str(config), "--rows", "gzip,zstd,ppmd", "--languages", "he"]) == 0
+    return config
+
+
+def test_a_real_run_measures_exactly_and_leaves_no_text_behind() -> None:
+    config = _work_config()
+    rows = "gzip,zstd,zstd_dict_he_112k,ppmd"
+    assert cli.main(["run", "--config", str(config), "--rows", rows, "--languages", "he"]) == 0
     data = json.loads((WORK / "results" / "bench.json").read_text(encoding="utf-8"))
     measured = {(r["tool"], r["set"]) for r in data["rows"]}
     assert ("zstd", "he_wiki") in measured and ("ppmd", "he_own") in measured
+    assert ("zstd_dict_he_112k", "he_fresh") in measured
     assert all(r["exact"] and r["status"] == "ok" for r in data["rows"])
     assert not (WORK / "work").exists(), "the work folder must be removed at the end"
     sample = (REPO / "golden" / "texts" / "wiki_cat.txt").read_text(encoding="utf-8").split()[5:12]
@@ -127,3 +136,17 @@ def test_a_real_run_measures_exactly_and_leaves_no_text_behind() -> None:
         assert " ".join(sample) not in path.read_text(encoding="utf-8"), f"text found in {path.name}"
     sets = {s for _, s in measured}
     assert "he_everyday_omilab" not in sets, "a set whose dataset was not given is skipped"
+
+
+def test_a_later_partial_run_keeps_the_machine_line_and_dates_its_own_rows(monkeypatch: Any) -> None:
+    config = _work_config()
+    for line, row in (("first machine", "gzip"), ("later machine", "zstd")):
+        monkeypatch.setattr(cli, "machine", lambda line=line: line)
+        assert cli.main(["run", "--config", str(config), "--rows", row, "--languages", "he"]) == 0
+    data = json.loads((WORK / "results" / "bench.json").read_text(encoding="utf-8"))
+    assert data["machine"] == "first machine"
+    assert data["tools"]["gzip"]["measured_on"] == "first machine"
+    assert data["tools"]["zstd"]["measured_on"] == "later machine"
+    assert list(data["tools"]) == ["gzip", "zstd"]
+    page = (WORK / "results" / "bench.md").read_text(encoding="utf-8")
+    assert "Machine: first machine" in page and "- zstd -19 (he, en): later machine" in page

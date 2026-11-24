@@ -14,8 +14,8 @@ from atar.compressors.loaded import ServicePool
 from atar.compressors.ppmd import Ppmd7Compressor
 from atar.compressors.service import ServiceCompressor
 from atar.compressors.stdlib import Bz2Compressor, GzipCompressor, XzCompressor
-from atar.compressors.zstd import ZstdCompressor
-from atar.config.load import ServiceRow
+from atar.compressors.zstd import ZstdCompressor, ZstdDictCompressor
+from atar.config.load import ROOT, ServiceRow
 from atar.core.errors import NotEnoughMemory, ToolFailed
 from tests.support import HEBREW, WORK
 
@@ -23,6 +23,7 @@ DRAWERS: list[Compressor] = [
     GzipCompressor({"level": 9}), Bz2Compressor({"level": 9}),
     XzCompressor({"preset": 9, "extreme": True}), Ppmd7Compressor({"order": 8, "memory_mb": 64}),
     ZstdCompressor({"level": 19}),
+    ZstdDictCompressor({"level": 19, "dictionary": str(ROOT / "bench" / "dicts" / "he_112640.zdict")}),
 ]
 
 

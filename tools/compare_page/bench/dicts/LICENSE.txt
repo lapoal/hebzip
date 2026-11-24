@@ -1,0 +1,18 @@
+zstd dictionaries of the benchmark's "zstd -19 + trained dictionary" rows
+========================================================================
+
+Licence: CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). These files are derived from
+the same Hebrew and English Wikipedia samples as the tables - see tables/CREDITS.md (sections 1, Hebrew
+Wikipedia, and 3, English Wikipedia) and tables/LICENSE for the attribution. A zstd dictionary holds pieces of its
+training text as they are (that is how zstd dictionaries work), so these files contain short excerpts of
+Wikipedia articles; they were modified only by zstd's training (selection of pieces + entropy tables).
+
+Made by:  python -m atar.bench dicts --corpus he=hewiki_random.jsonl --corpus en=enwiki_random.jsonl
+          (tools/compare_page/atar/bench/zdict.py; parameters in config/bench.toml [dicts]).
+Every file's size, sha256, dictionary id and the sha256 of the corpus it came from: dicts.json.
+
+Files:
+  en_1048576.zdict     1,048,576 B  sha256 77e41c1593497aa62b185776fe568ec292c7e2feeeb9ed378b342472db9cc212
+  en_112640.zdict        112,640 B  sha256 49db06bea853b9648c94ce551280d61e017374fc8b08354f0464c65753a0e699
+  he_1048576.zdict     1,048,576 B  sha256 144a29516a83cec38288fd329b92551e658b8433e0b4d9da8610bb6dc1514cb2
+  he_112640.zdict        112,640 B  sha256 141cad015fbf81eec97bf03d913e69c427b394eb99c3dfb52fa8562ccd6c1547

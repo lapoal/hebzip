@@ -33,7 +33,10 @@ function timeCell(row) {
   return `${loaded} (loaded); ${secs(row.cold_compress_s)} / ${secs(row.cold_decompress_s)} (new process)`;
 }
 
-function table(lang, data) {
+// A row measured in a later run than the table's date says its own date (its times are from that run).
+const version = (r, recorded) => (r.recorded && r.recorded !== recorded ? `${r.version}; measured ${r.recorded}` : r.version);
+
+function table(lang, data, recorded) {
   const head = el("tr", {}, el("th", { scope: "col", textContent: "Tool (version, flags)" }),
     el("th", { scope: "col", textContent: "Prior knowledge shipped with the tool" }),
     ...data.groups.map((g) => el("th", { scope: "col", className: "n", textContent: GROUPS[g.id] || g.id })),
@@ -41,7 +44,7 @@ function table(lang, data) {
   const raw = el("tr", { className: "muted-row" }, el("th", { scope: "row", textContent: "original text" }), el("td"),
     ...data.groups.map((g) => el("td", { className: "n", textContent: num(g.raw) })), el("td"));
   const rows = data.rows.map((r) => el("tr", { className: r.ours ? "ours" : "" },
-    el("th", { scope: "row" }, el("span", { textContent: r.label }), el("br"), el("small", { className: "muted", textContent: r.version })),
+    el("th", { scope: "row" }, el("span", { textContent: r.label }), el("br"), el("small", { className: "muted", textContent: version(r, recorded) })),
     el("td", { className: "prior", textContent: prior(r) }),
     ...data.groups.map((g) => el("td", { className: "n", textContent: num(r.sizes[g.id]) + pct(r.pct[g.id]) })),
     el("td", { className: "time", textContent: timeCell(r) })));
@@ -55,5 +58,5 @@ export function renderBench(host, bench) {
     `Recorded on ${bench.recorded}, on one laptop (${bench.machine}) - not measured in your browser. `,
     "Each text compressed alone; every package was decompressed and compared byte for byte. ",
     "Our modes stayed loaded (", el("code", { textContent: "hebzip serve" }), "); the second time is a new process per text."));
-  for (const [lang, data] of Object.entries(bench.languages)) host.append(table(lang, data));
+  for (const [lang, data] of Object.entries(bench.languages)) host.append(table(lang, data, bench.recorded));
 }

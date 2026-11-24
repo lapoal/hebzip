@@ -47,6 +47,8 @@ class Run:
     given: set[str]
     say: Say = say
     texts: dict[str, Path] = field(default_factory=dict)
+    measured_on: str = ""
+    """The machine line of this run, kept with every row that measures a text in it (``cli`` module text)."""
 
     def wanted(self, row: BenchRow) -> list[TextSet]:
         """The sets this row runs on (language of the row and of the run; dataset given)."""
@@ -88,6 +90,8 @@ def _one_row(run: Run, row: BenchRow, tool: Compressor) -> None:
             finally:
                 shutil.rmtree(folder, ignore_errors=True)
             results.put(run.data, got.as_json())
+            if run.measured_on:
+                run.data["tools"][row.tool.id]["measured_on"] = run.measured_on
             results.save(run.settings.results / "bench.json", run.data)
             run.say(f"{row.tool.id:14} {text_set.id:20} {ref.name:34} {got.raw:6} -> {got.bytes:6}  "
                     f"{got.status}  c={got.compress_s}s d={got.decompress_s}s")
@@ -107,7 +111,9 @@ def run_rows(run: Run, rows: tuple[BenchRow, ...]) -> None:
                 run.say(f"skip row {row.tool.id}: needs --{row.needs}")
                 continue
             tool = build(row.tool, pool)
-            run.data["tools"][row.tool.id] = _tool_info(row, tool)
+            earlier = run.data["tools"].get(row.tool.id, {}).get("measured_on")
+            run.data["tools"][row.tool.id] = _tool_info(row, tool) | (
+                {"measured_on": earlier} if earlier else {})
             try:
                 _one_row(run, row, tool)
             except AtarError as error:

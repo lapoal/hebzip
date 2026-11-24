@@ -34,16 +34,22 @@ The overlap check needs the two training corpora (one JSON article per line):
 A text whose title is a training article, or that shares >= 5% of its 8-word runs with one, is reported
 in a separate "seen in training" group and never in the headline numbers.
 
+The "zstd -19 + trained dictionary" rows use the dictionaries in dicts/, trained from the same two corpora
+(the same every-40th-line held out) with zstd's own --train defaults; to rebuild them:
+    python -m atar.bench dicts --corpus he=hewiki_random.jsonl --corpus en=enwiki_random.jsonl
+The same corpus file gives the same dictionary bytes; dicts/dicts.json records each file's sha256, the
+corpus file's sha256, the training parameters and the zstandard / libzstd version.
+
 Rules of the numbers
 --------------------
 - exact bytes of every package; a total only when every text of the group came back exact;
 - "% vs ours" = against our best mode on that group; a second table subtracts each tool's fixed
   per-package header (the header_bytes row of config/bench.toml says what it is for each tool);
 - prior knowledge: our tables (MB per mode, computed by hebzip from its config), brotli's built-in
-  dictionary, paq8px's English files - written next to the tables;
+  dictionary, zstd's trained dictionaries (their size), paq8px's English files - written next to the tables;
 - times: median per short text, on the machine named in bench.md. "loaded" = hebzip kept in memory
   (python -m hebzip serve, as the comparison page uses it); "cold CLI" = a new process per call.
-  In-process tools (gzip, bzip2, xz, zstd, PPMd) are timed inside Python; brotli and paq8px start a
+  In-process tools (gzip, bzip2, xz, zstd with or without its dictionary, PPMd) are timed inside Python; brotli and paq8px start a
   new process per call (included in their time).
 
 Where things are
@@ -51,5 +57,6 @@ Where things are
     manifest.json        the text sets: every text with its source (title, URL, dates) and sha256
     texts/               the shipped Wikipedia texts (CC BY-SA 4.0, see texts/SOURCES.txt)
     brotli.js            the brotli row (Node.js's built-in zlib)
+    dicts/               the zstd dictionaries (CC BY-SA 4.0, derived from Wikipedia; see dicts/LICENSE.txt)
     ../config/bench.toml the rows (tools, options, headers, prior knowledge)
     ../atar/bench/       the code

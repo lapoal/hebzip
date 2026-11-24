@@ -1,0 +1,78 @@
+{
+ "what": "zstd dictionaries for the bench (atar/bench/zdict.py)",
+ "library": "zstandard 0.25.0 (libzstd 1.5.7)",
+ "params": {
+  "level": 19,
+  "d": 8,
+  "f": 20,
+  "steps": 4,
+  "accel": 1,
+  "split_point": 0.75,
+  "threads": 1
+ },
+ "held_every": 40,
+ "sample": "one per non-blank line of every training article, in corpus order",
+ "licence": "CC BY-SA 4.0 (derived from Wikipedia; see LICENSE.txt here)",
+ "files": {
+  "en_1048576.zdict": {
+   "language": "en",
+   "corpus": "enwiki_random.jsonl",
+   "corpus_sha256": "497cd90ed372a93c9fed555fd462de723c749cd4d64a83fb008f4a4e23c52ccb",
+   "articles": 12185,
+   "held_out": 312,
+   "samples": 331525,
+   "sample_bytes": 38960411,
+   "asked_bytes": 1048576,
+   "bytes": 1048576,
+   "sha256": "77e41c1593497aa62b185776fe568ec292c7e2feeeb9ed378b342472db9cc212",
+   "dict_id": 524044930,
+   "k": 50,
+   "d": 8
+  },
+  "en_112640.zdict": {
+   "language": "en",
+   "corpus": "enwiki_random.jsonl",
+   "corpus_sha256": "497cd90ed372a93c9fed555fd462de723c749cd4d64a83fb008f4a4e23c52ccb",
+   "articles": 12185,
+   "held_out": 312,
+   "samples": 331525,
+   "sample_bytes": 38960411,
+   "asked_bytes": 112640,
+   "bytes": 112640,
+   "sha256": "49db06bea853b9648c94ce551280d61e017374fc8b08354f0464c65753a0e699",
+   "dict_id": 1920651753,
+   "k": 50,
+   "d": 8
+  },
+  "he_1048576.zdict": {
+   "language": "he",
+   "corpus": "hewiki_random.jsonl",
+   "corpus_sha256": "ba7a33930bc8d53c6ad4f1f9333d33c323288433ac2abef6bb82b7ddc56f5287",
+   "articles": 6047,
+   "held_out": 155,
+   "samples": 6595,
+   "sample_bytes": 39039435,
+   "asked_bytes": 1048576,
+   "bytes": 1048576,
+   "sha256": "144a29516a83cec38288fd329b92551e658b8433e0b4d9da8610bb6dc1514cb2",
+   "dict_id": 237794768,
+   "k": 537,
+   "d": 8
+  },
+  "he_112640.zdict": {
+   "language": "he",
+   "corpus": "hewiki_random.jsonl",
+   "corpus_sha256": "ba7a33930bc8d53c6ad4f1f9333d33c323288433ac2abef6bb82b7ddc56f5287",
+   "articles": 6047,
+   "held_out": 155,
+   "samples": 6595,
+   "sample_bytes": 39039435,
+   "asked_bytes": 112640,
+   "bytes": 112640,
+   "sha256": "141cad015fbf81eec97bf03d913e69c427b394eb99c3dfb52fa8562ccd6c1547",
+   "dict_id": 596978742,
+   "k": 50,
+   "d": 8
+  }
+ }
+}

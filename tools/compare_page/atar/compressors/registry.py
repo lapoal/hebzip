@@ -23,7 +23,7 @@ from atar.compressors.loaded import ServicePool
 from atar.compressors.ppmd import Ppmd7Compressor
 from atar.compressors.service import ServiceCompressor
 from atar.compressors.stdlib import Bz2Compressor, GzipCompressor, XzCompressor
-from atar.compressors.zstd import ZstdCompressor
+from atar.compressors.zstd import ZstdCompressor, ZstdDictCompressor
 from atar.config.load import ToolRow
 from atar.core.errors import ConfigError
 
@@ -35,6 +35,7 @@ KINDS: dict[str, Factory] = {
     "bz2": lambda o, t, p: Bz2Compressor(o),
     "ppmd7": lambda o, t, p: Ppmd7Compressor(o),
     "zstd": lambda o, t, p: ZstdCompressor(o),
+    "zstd_dict": lambda o, t, p: ZstdDictCompressor(o),
     "command": lambda o, t, p: CommandCompressor(o, t),
     "service": lambda o, t, p: ServiceCompressor(o, t, p),
     "null": lambda o, t, p: NullCompressor(o),

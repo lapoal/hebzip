@@ -4,7 +4,8 @@ Lossless compression for **short Hebrew and English texts** - messages, letters,
 openings. It gets them much smaller than general-purpose compressors because it ships with prior
 knowledge: tables of words, word pairs and the bytes between words, built from Wikipedia and the fastText
 Hebrew word list (25.3 MB for the Hebrew mode `fast`, up to 191 MB for the biggest mode). That knowledge is
-the whole trick, so every comparison below says how much each tool ships with.
+the whole trick, so every comparison below says how much each tool ships with - and zstd is also shown
+with a dictionary trained on the same Wikipedia sample, so you can see what that knowledge alone buys.
 
 It is a research tool, not a replacement for zstd: it is **slow** (tens of milliseconds per short text when
 kept loaded, seconds for a new process; zstd needs about a millisecond), it needs large tables, and its
@@ -16,7 +17,7 @@ the browser. · [Hebrew README / קרא בעברית](README.he.md)
 
 ## Results
 
-Recorded on 2026-11-22 **on one laptop** (Intel i3-1215U, 11.7 GB RAM, Windows 11, Python 3.12.10) with
+Recorded on 2026-11-22 (the zstd + trained dictionary rows on 2026-11-24) **on one laptop** (Intel i3-1215U, 11.7 GB RAM, Windows 11, Python 3.12.10) with
 `python -m atar.bench run` (see [Reproduce](#reproduce-the-benchmark)). Each text is compressed alone; every
 package was decompressed and compared byte for byte. Numbers are package bytes, in brackets the difference
 against our best mode on that set. Texts that may have been in our training corpus are never in these
@@ -36,6 +37,8 @@ Facebook comments from the OMILab Hebrew sentiment benchmark; not shipped, rebui
 | bzip2 -9 | none | 3,592 (+104.9%) | 2,820 (+118.3%) | 11,377 (+53.6%) | 2,825 (+102.2%) | 20,614 (+74.0%) |
 | xz -9e | none | 4,356 (+148.5%) | 3,592 (+178.0%) | 14,060 (+89.8%) | 3,936 (+181.7%) | 25,944 (+119.0%) |
 | zstd -19 | none | 4,132 (+135.7%) | 3,334 (+158.0%) | 13,790 (+86.2%) | 3,291 (+135.6%) | 24,547 (+107.2%) |
+| zstd -19 + trained dictionary (112,640 B) | dictionary from the same Wikipedia sample, 0.11 MB | 3,034 (+73.1%) | 2,328 (+80.2%) | 11,523 (+55.6%) | 2,313 (+65.6%) | 19,198 (+62.0%) |
+| zstd -19 + trained dictionary (1 MiB) | dictionary from the same Wikipedia sample, 1.05 MB | 2,850 (+62.6%) | 2,206 (+70.7%) | 11,194 (+51.1%) | 2,219 (+58.8%) | 18,469 (+55.9%) |
 | brotli -q 11 | built-in dictionary, 0.12 MB | 3,641 (+107.7%) | 2,876 (+122.6%) | 12,561 (+69.6%) | 2,646 (+89.4%) | 21,724 (+83.3%) |
 | PPMd (H, order 8) | none | 3,180 (+81.4%) | 2,534 (+96.1%) | 10,616 (+43.3%) | 2,531 (+81.2%) | 18,861 (+59.2%) |
 | paq8px v217 -8L | none | 2,885 (+64.6%) | 2,305 (+78.4%) | 9,749 (+31.6%) | 2,274 (+62.8%) | 17,213 (+45.3%) |
@@ -52,6 +55,8 @@ Facebook comments from the OMILab Hebrew sentiment benchmark; not shipped, rebui
 | bzip2 -9 | none | 2,927 (+175.1%) | 4,971 (+150.7%) | 4,332 (+48.1%) | 18,977 (+70.1%) | 31,207 (+82.2%) |
 | xz -9e | none | 3,160 (+197.0%) | 5,832 (+194.1%) | 4,560 (+55.9%) | 20,016 (+79.4%) | 33,568 (+96.0%) |
 | zstd -19 | none | 2,725 (+156.1%) | 4,660 (+135.0%) | 4,519 (+54.5%) | 19,671 (+76.3%) | 31,575 (+84.3%) |
+| zstd -19 + trained dictionary (112,640 B) | dictionary from the same Wikipedia sample, 0.11 MB | 1,792 (+68.4%) | 3,307 (+66.8%) | 4,045 (+38.3%) | 16,308 (+46.2%) | 25,452 (+48.6%) |
+| zstd -19 + trained dictionary (1 MiB) | dictionary from the same Wikipedia sample, 1.05 MB | 1,661 (+56.1%) | 3,101 (+56.4%) | 3,796 (+29.8%) | 15,371 (+37.8%) | 23,929 (+39.7%) |
 | brotli -q 11 | built-in dictionary, 0.12 MB | 1,886 (+77.3%) | 3,359 (+69.4%) | 3,814 (+30.4%) | 15,677 (+40.5%) | 24,736 (+44.4%) |
 | PPMd (H, order 8) | none | 2,394 (+125.0%) | 4,190 (+111.3%) | 3,791 (+29.6%) | 16,706 (+49.7%) | 27,081 (+58.1%) |
 | paq8px v217 -8L | none | 2,232 (+109.8%) | 3,934 (+98.4%) | 3,390 (+15.9%) | 15,176 (+36.0%) | 24,732 (+44.4%) |
@@ -62,11 +67,19 @@ Facebook comments from the OMILab Hebrew sentiment benchmark; not shipped, rebui
 How to read this honestly:
 
 - The claim is narrow: **short Hebrew (and English) messages, with shipped tables of 25-191 MB.** The other
-  tools (except brotli's small dictionary and paq8px -8LT's English files) start empty and learn only from
-  the text itself, which is why short texts are hard for them. This is not "better than PAQ" in general;
+  tools (except brotli's small dictionary, paq8px -8LT's English files and the zstd rows with a trained
+  dictionary) start empty and learn only from the text itself, which is why short texts are hard for them. This is not "better than PAQ" in general;
   on long texts the gap shrinks (English, one long new article: en_max 2,925 vs paq8px -8LT 2,955 bytes).
-- Versions and flags: zlib 1.3.1; Python's bz2 / lzma; zstandard 0.25.0 (libzstd 1.5.7) without a
-  dictionary; Node.js zlib brotli quality 11; pyppmd 1.3.1 PPMd7 order 8, 64 MB; paq8px v217. The table
+- **zstd with a trained dictionary** is the fair "same prior knowledge" baseline: dictionaries trained by
+  zstd's own `--train` defaults from the same Wikipedia samples our tables were built from (the same
+  held-out articles left out; [dicts/](tools/compare_page/bench/dicts/)), each text compressed alone with
+  it. It closes about half of the distance between plain zstd and our `fast` mode, and stays far behind:
+  Hebrew, all 28 texts, 19,198 / 18,469 bytes (112,640 B / 1 MiB dictionary) against 12,430 for `fast`
+  (54% / 49% larger); English 25,452 / 23,929 against 17,653 for `en_fast` (44% / 36% larger). The bigger
+  dictionary saved zstd only 3.8% (Hebrew) and 6.0% (English). Even so, our tables are 25-191 MB and
+  these dictionaries 0.11-1.05 MB, so this compares methods with very different amounts of stored data.
+- Versions and flags: zlib 1.3.1; Python's bz2 / lzma; zstandard 0.25.0 (libzstd 1.5.7) without and with a
+  trained dictionary (the frame carries the dictionary's 4-byte id); Node.js zlib brotli quality 11; pyppmd 1.3.1 PPMd7 order 8, 64 MB; paq8px v217. The table
   without each tool's fixed header bytes is in [bench.md](tools/compare_page/bench/results/bench.md).
 - One laptop, one run. The sizes are exact and reproducible; the times are not portable.
 
@@ -75,6 +88,7 @@ How to read this honestly:
 | tool | compress | decompress |
 |---|---:|---:|
 | gzip -9 / zstd -19 / PPMd | 0.001 s | 0.009-0.015 s |
+| zstd -19 + trained dictionary, 112,640 B / 1 MiB (loads the dictionary for every text) | 0.009-0.016 s / 0.24-0.29 s | 0.012-0.015 s / 0.020-0.021 s |
 | brotli -q 11 (includes starting Node.js) | 0.067 s | 0.059 s |
 | hebzip fast / en_fast, kept loaded (`hebzip serve`) | 0.054 s / 0.070 s | 0.021 s / 0.028 s |
 | hebzip max / max_plus, kept loaded | 0.278 s / 0.340 s | 0.103 s / 0.167 s |
@@ -141,7 +155,8 @@ Node.js on the PATH gives the brotli row. `--omilab` rebuilds the real-comments 
 (each rebuilt text is checked against its sha256 first); paq8px is GPL and not shipped - build v217 yourself.
 Whatever is not given is skipped with a line saying so. Results: `tools/compare_page/bench/results/`
 (`bench.json` every pair, `summary.json`, `bench.md`). Details: [bench/README.txt](tools/compare_page/bench/README.txt).
-The training-overlap check: `python -m atar.bench overlap --corpus he=... --corpus en=...`.
+The training-overlap check: `python -m atar.bench overlap --corpus he=... --corpus en=...`; the zstd
+dictionaries are rebuilt (same bytes from the same corpus files) with `python -m atar.bench dicts --corpus he=... --corpus en=...`.
 
 ## How it works
 

@@ -19,8 +19,9 @@ from atar.config.load import ROOT, ServiceRow, ToolRow, keys, service_rows, tool
 from atar.core.errors import ConfigError
 
 DEFAULT_BENCH = ROOT / "config" / "bench.toml"
-_SECTIONS = {"bench", "services", "rows"}
+_SECTIONS = {"bench", "services", "rows", "dicts"}
 _BENCH = {"manifest", "results", "work", "seen_share", "languages"}
+_DICTS = {"folder", "sizes", "level", "d", "f", "steps", "accel", "split_point"}
 _ROW_EXTRA = {"header_bytes", "languages", "prior", "needs", "hebzip_mode", "mode_id"}
 NEEDS = ("paq8px",)
 """External programs a row may need; each is given on the command line (``--paq8px DIR``)."""
@@ -40,6 +41,20 @@ class BenchRow:
 
 
 @dataclass(frozen=True, slots=True)
+class DictSettings:
+    """How the zstd dictionaries are trained (``[dicts]``; zstd's own ``--train`` defaults, see the toml)."""
+
+    folder: Path
+    sizes: tuple[int, ...]
+    level: int
+    d: int
+    f: int
+    steps: int
+    accel: int
+    split_point: float
+
+
+@dataclass(frozen=True, slots=True)
 class BenchSettings:
     """Everything the bench needs, already checked."""
 
@@ -50,6 +65,7 @@ class BenchSettings:
     languages: tuple[str, ...]
     rows: tuple[BenchRow, ...]
     services: tuple[ServiceRow, ...]
+    dicts: DictSettings
 
 
 def _path(value: Any, where: str) -> Path:
@@ -99,6 +115,18 @@ def _filled(value: Any, words: dict[str, str]) -> Any:
     return value
 
 
+def _dicts(raw: Any) -> DictSettings:
+    table = keys(raw, _DICTS, "dicts")
+    sizes = typed(table["sizes"], list, "dicts.sizes")
+    if not sizes or not all(isinstance(n, int) and not isinstance(n, bool) and n > 0 for n in sizes):
+        raise ConfigError("בהגדרות: 'dicts.sizes' צריך להיות רשימת מספרים חיוביים")
+    ints = {k: int(typed(table[k], int, f"dicts.{k}")) for k in ("level", "d", "f", "steps", "accel")}
+    split = float(typed(table["split_point"], float, "dicts.split_point"))
+    if not 0 < split <= 1:
+        raise ConfigError("בהגדרות: dicts.split_point חייב להיות בין 0 ל-1")
+    return DictSettings(_path(table["folder"], "dicts.folder"), tuple(sizes), split_point=split, **ints)
+
+
 def parse(data: dict[str, Any], words: dict[str, str]) -> BenchSettings:
     """Validate a parsed ``bench.toml``. ``words``: placeholders known only at run time (``{paq8px}``)."""
     top = keys(data, _SECTIONS, "קובץ")
@@ -113,7 +141,7 @@ def parse(data: dict[str, Any], words: dict[str, str]) -> BenchSettings:
     return BenchSettings(_path(bench["manifest"], "bench.manifest"), _path(bench["results"], "bench.results"),
                          _path(bench["work"], "bench.work"), share,
                          _strings(bench["languages"], "bench.languages"),
-                         rows, service_rows(top["services"]))
+                         rows, service_rows(top["services"]), _dicts(top["dicts"]))
 
 
 def load(path: Path, words: dict[str, str]) -> BenchSettings:

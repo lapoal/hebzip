@@ -106,8 +106,8 @@
    "sha256": "c329bda5fe71ac44790654e5228d10b52d7a70d9677dc4a8a00890939a818ad7"
   },
   "data/bench.json": {
-   "bytes": 14985,
-   "sha256": "207adeb11c525bf4034ee5b9d7cee3946238955954ef76759f33dfc68a306da3"
+   "bytes": 18850,
+   "sha256": "04d3260118bada4710b95663dc195b427da1615513887f6c0bbe4e0ab8eb6f35"
   },
   "pyodide/pyodide.mjs": {
    "bytes": 17758,
@@ -134,6 +134,6 @@
    "sha256": "a292c1f5d7d8a2208cd5e94fc467604c131cabcd2fc14fed6eefde121e7fabdf"
   }
  },
- "total_bytes": 36085327,
- "total_raw_bytes": 87705416
+ "total_bytes": 36089192,
+ "total_raw_bytes": 87709281
 }

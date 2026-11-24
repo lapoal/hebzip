@@ -1,8 +1,9 @@
-"""``python -m atar.bench run | report | overlap`` - the one command that re-runs the public measurement.
+"""``python -m atar.bench run | report | overlap | dicts`` - the one command that re-runs the measurement.
 
     python -m atar.bench run [--omilab DIR] [--paq8px paq8px.exe --paq8px-dict DIR]
     python -m atar.bench report
     python -m atar.bench overlap --corpus he=hewiki_random.jsonl --corpus en=enwiki_random.jsonl
+    python -m atar.bench dicts --corpus he=hewiki_random.jsonl --corpus en=enwiki_random.jsonl
 
 ``run`` measures every row of ``config/bench.toml`` on every text of ``bench/manifest.json`` (resuming
 an interrupted run; ``--fresh`` starts over), then writes ``bench/results/bench.json`` (every pair)
@@ -10,11 +11,16 @@ and ``summary.json`` + ``bench.md`` (the tables). Optional inputs: the everyday 
 text is not shipped) and paq8px (GPL, not shipped; ``-8LT`` also needs its english.dic / .exp / .emb,
 which are copied next to a scratch copy of the exe because paq8px opens them from its own folder).
 Whatever is not given is skipped with a line saying so. Run from ``tools/compare_page``.
+
+A run of some rows only (``--rows``) keeps the earlier machine line and records the new rows' own line in
+their tool entry (``measured_on``), so the report never dates old timings with today. ``dicts`` trains the
+zstd dictionaries of the trained-dictionary rows (``atar.bench.zdict``).
 """
 
 from __future__ import annotations
 
 import argparse
+import dataclasses
 import json
 import platform
 import shutil
@@ -23,7 +29,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
-from atar.bench import markdown, overlap, prior, report, results
+from atar.bench import markdown, overlap, prior, report, results, zdict
 from atar.bench.config import DEFAULT_BENCH, BenchSettings, load
 from atar.bench.datasets import Rebuilder
 from atar.bench.run import Run, run_rows, say
@@ -73,19 +79,29 @@ def _settings(args: argparse.Namespace) -> BenchSettings:
 def cmd_run(args: argparse.Namespace) -> int:
     settings = _settings(args)
     if args.languages:
-        settings = BenchSettings(settings.manifest, settings.results, settings.work, settings.seen_share,
-                                 tuple(args.languages.split(",")), settings.rows, settings.services)
+        settings = dataclasses.replace(settings, languages=tuple(args.languages.split(",")))
     rows = tuple(r for r in settings.rows if not args.rows or r.tool.id in args.rows.split(","))
     data = {"tools": {}, "rows": []} if args.fresh else results.load(settings.results / "bench.json")
-    data["machine"] = machine()
+    now = machine()
+    data.setdefault("machine", now)
     given = {"paq8px"} if args.paq8px else set()
-    run = Run(settings, load_manifest(settings.manifest), data, Rebuilder(args.omilab), given)
+    run = Run(settings, load_manifest(settings.manifest), data, Rebuilder(args.omilab), given,
+              measured_on=now)
     try:
         run_rows(run, rows)
     finally:
         shutil.rmtree(settings.work, ignore_errors=True)
+    _in_config_order(settings, data)
+    results.save(settings.results / "bench.json", data)
     _write_report(settings, data, args.paq8px_dict)
     return 0
+
+
+def _in_config_order(settings: BenchSettings, data: dict[str, Any]) -> None:
+    """The tools in the order of the config rows (a row added later shows next to its kin, not last)."""
+    order = [r.tool.id for r in settings.rows if r.tool.id in data["tools"]]
+    rest = [t for t in data["tools"] if t not in order]
+    data["tools"] = {t: data["tools"][t] for t in order + rest}
 
 
 def _write_report(settings: BenchSettings, data: dict[str, Any], paq_dict: Path | None) -> None:
@@ -132,9 +148,22 @@ def cmd_overlap(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_dicts(args: argparse.Namespace) -> int:
+    settings = load(args.config, {})
+    made: dict[str, Any] = {}
+    for item in args.corpus:
+        language, _, path = item.partition("=")
+        say(f"dicts: {language} from {Path(path).name}, sizes {list(settings.dicts.sizes)} ...")
+        made.update(zdict.build(language, Path(path), settings.dicts))
+    for name, info in made.items():
+        say(f"  {name}: {info['bytes']:,} B, sha256 {info['sha256'][:12]}, k={info['k']} d={info['d']}")
+    say(f"written: {zdict.record(settings.dicts, made)}")
+    return 0
+
+
 def parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="python -m atar.bench")
-    p.add_argument("command", choices=("run", "report", "overlap"))
+    p.add_argument("command", choices=("run", "report", "overlap", "dicts"))
     p.add_argument("--config", type=Path, default=DEFAULT_BENCH)
     p.add_argument("--omilab", type=Path, help="folder with token_train.tsv + token_test.tsv")
     p.add_argument("--paq8px", type=Path, help="paq8px.exe (v217 was used)")
@@ -142,14 +171,15 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--languages", help="comma-separated, e.g. he (default: the config's)")
     p.add_argument("--rows", help="comma-separated row ids (default: every row)")
     p.add_argument("--fresh", action="store_true", help="forget earlier results and measure everything again")
-    p.add_argument("--corpus", action="append", default=[], help="overlap: LANGUAGE=corpus.jsonl")
+    p.add_argument("--corpus", action="append", default=[], help="overlap / dicts: LANGUAGE=corpus.jsonl")
     return p
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = parser().parse_args(argv)
     try:
-        return {"run": cmd_run, "report": cmd_report, "overlap": cmd_overlap}[args.command](args)
+        commands = {"run": cmd_run, "report": cmd_report, "overlap": cmd_overlap, "dicts": cmd_dicts}
+        return commands[args.command](args)
     except AtarError as error:
         sys.stderr.write(f"{error}\n")
         return 2
